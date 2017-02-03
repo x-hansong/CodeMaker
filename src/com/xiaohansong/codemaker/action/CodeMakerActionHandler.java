@@ -59,13 +59,11 @@ public class CodeMakerActionHandler extends EditorWriteActionHandler {
         }
         PsiClass currentClass = classes[0];
         List<PsiClass> selectClasses = new ArrayList<>();
-        //添加当前选择的类
         selectClasses.add(currentClass);
         CodeTemplate codeTemplate = settings.getCodeTemplate(templateKey);
-        //根据配置的数量，通过选择框选择需要的类
+        //select the other class by classChooser
         for (int i = 1; i < codeTemplate.getClassNumber(); i++) {
             PsiClass psiClass = CodeMakerUtil.chooseClass(project, currentClass);
-            //如果没有选择对应类，不做处理
             if (psiClass == null) {
                 return;
             }
@@ -85,7 +83,7 @@ public class CodeMakerActionHandler extends EditorWriteActionHandler {
 
         String content = VelocityUtil.evaluate(codeTemplate.getCodeTemplate(), map);
 
-        //异步进行写操作
+        // async write action
         ApplicationManager.getApplication().runWriteAction(
             new CreateFileAction(CodeMakerUtil.generateClassPath(
                 CodeMakerUtil.getSourcePath(currentClass), className), content, dataContext));

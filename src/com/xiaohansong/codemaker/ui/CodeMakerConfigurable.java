@@ -98,4 +98,8 @@ public class CodeMakerConfigurable implements SearchableConfigurable {
         }
     }
 
+    @Override
+    public void disposeUIResources() {
+        this.configuration = null;
+    }
 }

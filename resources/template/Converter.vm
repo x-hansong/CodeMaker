@@ -47,7 +47,7 @@ import $importer;
 class $ClassName {
 
     /**
-     * 将${class1.ClassName}转换为${class0.ClassName}
+     * Convert ${class1.ClassName} to ${class0.ClassName}
      * @param ${class1Var}
      * @return
      */
@@ -67,7 +67,7 @@ class $ClassName {
     }
 
     /**
-     * 将${class0.ClassName}转换为${class1.ClassName}
+     * Convert ${class0.ClassName} to ${class1.ClassName}
      * @param ${class0Var}
      * @return
      */

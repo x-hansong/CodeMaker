@@ -27,11 +27,6 @@ public class TemplateEditPane {
     private JPanel     editorPane;
     private Editor     editor;
 
-    /**
-     * 构建配置面板
-     * @param settings
-     * @param template 传入settings中不存在的模板名称则构建空模板配置
-     */
     public TemplateEditPane(CodeMakerSettings settings, String template,
                             CodeMakerConfiguration parentPane) {
         CodeTemplate codeTemplate = settings.getCodeTemplate(template);
@@ -52,10 +47,6 @@ public class TemplateEditPane {
         });
     }
 
-    /**
-     * 给templateEdit添加vm编辑器
-     * @param template
-     */
     private void addVmEditor(String template) {
         EditorFactory factory = EditorFactory.getInstance();
         Document velocityTemplate = factory.createDocument(template);

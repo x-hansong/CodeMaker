@@ -9,22 +9,22 @@ import com.intellij.openapi.util.text.StringUtil;
 public class CodeTemplate {
 
     /**
-     * 代码模板名称，英文命名
+     * template name
      */
     private String name;
 
     /**
-     * 生成代码的类名称(vm格式)
+     * the generated class name, support velocity
      */
     private String classNameVm;
 
     /**
-     * vm格式代码模板
+     * code template in velocity
      */
     private String codeTemplate;
 
     /**
-     * 导入vm上下文的类数量
+     * the number of template context class
      */
     private int    classNumber;
 
