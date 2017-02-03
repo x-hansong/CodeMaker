@@ -1,5 +1,5 @@
 # CodeMaker
-A idea-plugin for java, support custom code template.
+A idea-plugin for java to generate code, support custom code template.
 
 This plugin generates code from right click 'Generate...' menu while focused on a java class. The output class can be customized using a provided velocity template to format the code based on the origin class and optional selected classes.</p>
 
@@ -25,6 +25,7 @@ This plugin generates code from right click 'Generate...' menu while focused on 
 ![Generage](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker0.png)
 
 The plugin support multiple class to generate one code, you can set the class number of template to select multiple classes to use.
+
 ![select class](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker1.png)
 
 # Configuration
@@ -33,6 +34,6 @@ The plugin support multiple class to generate one code, you can set the class nu
 - **Delete template**: click "Delete Template" button to delete a template.
 
 ![property](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker2.png)
-- **classNumber**: The template context will contain the class which user select when trigger the generate action. for example, the number is 1, the template context only has the focused class: $class0; if the number is 2, when you trigger the generate action, you need select a class, then the template context will have tow class entry: $class0, $class1
+- **classNumber**: The template context will contain the class which user select when trigger the generate action. for example, the number is 1, the template context only has the focused class: $class0; if the number is 2, when you trigger the generate action, you need select a class, then the template context will have two class entry: $class0, $class1
 - **className**: The class name support velocity and the template context.
 
