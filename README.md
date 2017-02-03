@@ -22,3 +22,17 @@ To install a plugin from the disk in idea
 
 # Usage
 This plugin generates code from right click 'Generate...' menu while focused on a java class. 
+![Generage](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker0.png)
+
+The plugin support multiple class to generate one code, you can set the class number of template to select multiple classes to use.
+![select class](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker1.png)
+
+# Configuration
+![configure](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker3.png)
+- **Add template**: click "Add Tempalte" button to add a template, after saving changes, you need to restart idea to make changes work.
+- **Delete template**: click "Delete Template" button to delete a template.
+
+![property](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker2.png)
+- **classNumber**: The template context will contain the class which user select when trigger the generate action. for example, the number is 1, the template context only has the focused class: $class0; if the number is 2, when you trigger the generate action, you need select a class, then the template context will have tow class entry: $class0, $class1
+- **className**: The class name support velocity and the template context.
+
