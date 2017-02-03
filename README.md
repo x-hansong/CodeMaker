@@ -1,6 +1,8 @@
 # CodeMaker
 A idea-plugin for java to generate code, support custom code template.
 
+![demonstration](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker.gif)
+
 This plugin generates code from right click 'Generate...' menu while focused on a java class. The output class can be customized using a provided velocity template to format the code based on the origin class and optional selected classes.</p>
 
 The output class will be created at the source path of origin class. The following features are available: 
