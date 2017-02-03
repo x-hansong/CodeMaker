@@ -1,0 +1,57 @@
+########################################################################################
+##
+## Common variables:
+##  $YEAR - yyyy
+##  $TIME - yyyy-MM-dd HH:mm:ss
+##  $USER - user.name
+##
+## Available variables:
+##  $class0 - the context class
+##  $class1 - the selected class, like $class2, $class2
+##  $ClassName - generate by the config of "Class Name", the generated class name
+##
+## Class Entry Structure:
+##  $class0.className - the class Name
+##  $class0.packageName - the packageName
+##  $class0.importList - the list of imported classes name
+##  $class0.fields - the list of the class fields
+##          - type: the field type
+##          - name: the field name
+##          - modifier: the field modifier, like "private"
+##  $class0.methods - the list of class methods
+##          - name: the method name
+##          - modifier: the method modifier, like "private static"
+##          - returnType: the method returnType
+##          - params: the method params, like "(String name)"
+##
+########################################################################################
+/**
+* Alipay.com Inc.
+* Copyright (c) 2004-$YEAR All Rights Reserved.
+*/
+package $class0.PackageName;
+
+#foreach($importer in $class0.ImportList)
+import $importer;
+#end
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ *
+ * @author $USER
+ * @version $Id: ${ClassName}.java, v 0.1 $TIME $USER Exp $$
+ */
+class $ClassName {
+
+#foreach($field in $class0.Fields)
+    /**
+     *
+     */
+    @Getter
+    @Setter
+    private $field.Type $field.Name;
+
+#end
+
+}

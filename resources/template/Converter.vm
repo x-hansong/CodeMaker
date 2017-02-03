@@ -1,0 +1,88 @@
+########################################################################################
+##
+## Common variables:
+##  $YEAR - yyyy
+##  $TIME - yyyy-MM-dd HH:mm:ss
+##  $USER - user.name
+##
+## Available variables:
+##  $class0 - the context class
+##  $class1 - the selected class, like $class2, $class2
+##  $ClassName - generate by the config of "Class Name", the generated class name
+##
+## Class Entry Structure:
+##  $class0.className - the class Name
+##  $class0.packageName - the packageName
+##  $class0.importList - the list of imported classes name
+##  $class0.fields - the list of the class fields
+##          - type: the field type
+##          - name: the field name
+##          - modifier: the field modifier, like "private"
+##  $class0.methods - the list of class methods
+##          - name: the method name
+##          - modifier: the method modifier, like "private static"
+##          - returnType: the method returnType
+##          - params: the method params, like "(String name)"
+##
+########################################################################################
+#macro (cap $strIn)$strIn.valueOf($strIn.charAt(0)).toUpperCase()$strIn.substring(1)#end
+#macro (low $strIn)$strIn.valueOf($strIn.charAt(0)).toLowerCase()$strIn.substring(1)#end
+#set($class0Var = "#low(${class0.ClassName})")
+#set($class1Var = "#low(${class1.ClassName})")
+/**
+* Alipay.com Inc.
+* Copyright (c) 2004-$YEAR All Rights Reserved.
+*/
+package $class0.PackageName;
+
+#foreach($importer in $class0.ImportList)
+import $importer;
+#end
+
+/**
+ *
+ * @author $USER
+ * @version $Id: ${ClassName}.java, v 0.1 $TIME $USER Exp $$
+ */
+class $ClassName {
+
+    /**
+     * 将${class1.ClassName}转换为${class0.ClassName}
+     * @param ${class1Var}
+     * @return
+     */
+    public static $class0.ClassName convertTo${class0.ClassName}($class1.ClassName #low($class1.ClassName)) {
+        if (${class1Var} == null) {
+            return null;
+        }
+        $class0.ClassName ${class0Var} = new ${class0.ClassName}();
+
+#foreach($field in $class0.Fields)
+#if( $field.modifier.equals("private"))
+        ${class0Var}.set#cap($field.Name)(${class1Var}.get#cap($field.Name)());
+#end
+#end
+
+        return ${class0Var};
+    }
+
+    /**
+     * 将${class0.ClassName}转换为${class1.ClassName}
+     * @param ${class0Var}
+     * @return
+     */
+    public static $class1.ClassName convertTo${class1.ClassName}($class0.ClassName #low($class0.ClassName)) {
+        if (${class0Var} == null) {
+            return null;
+        }
+        $class1.ClassName ${class1Var} = new ${class1.ClassName}();
+
+#foreach($field in $class1.Fields)
+#if( $field.modifier.equals("private"))
+        ${class1Var}.set#cap($field.Name)(${class0Var}.get#cap($field.Name)());
+#end
+#end
+
+        return ${class1Var};
+    }
+}
