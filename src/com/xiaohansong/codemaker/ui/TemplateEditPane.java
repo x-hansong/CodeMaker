@@ -5,10 +5,10 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.xiaohansong.codemaker.CodeMakerSettings;
 import com.xiaohansong.codemaker.CodeTemplate;
+import com.xiaohansong.codemaker.util.CodeMakerUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -79,10 +79,14 @@ public class TemplateEditPane {
         return editor.getDocument().getText();
     }
 
+    /**
+     *
+     * @return -1 if classNumberText is not number
+     */
     public int getClassNumber() {
-        if (StringUtil.isEmpty(classNameText.getText())) {
-            return 1;
+        if (CodeMakerUtil.isNumeric(classNumberText.getText())) {
+            return Integer.parseInt(classNumberText.getText());
         }
-        return Integer.parseInt(classNumberText.getText());
+        return -1;
     }
 }

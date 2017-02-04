@@ -40,7 +40,7 @@ public class CodeTemplate {
 
     public boolean isValid() {
         return StringUtil.isNotEmpty(getClassNameVm()) && StringUtil.isNotEmpty(getName())
-               && StringUtil.isNotEmpty(getCodeTemplate());
+               && StringUtil.isNotEmpty(getCodeTemplate()) && classNumber != -1;
     }
 
     @Override

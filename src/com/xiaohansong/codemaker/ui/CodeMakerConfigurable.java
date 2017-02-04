@@ -83,12 +83,13 @@ public class CodeMakerConfigurable implements SearchableConfigurable {
     public void apply() throws ConfigurationException {
         for (Map.Entry<String, CodeTemplate> entry : configuration.getTabTemplates().entrySet()) {
             if (!entry.getValue().isValid()) {
-                throw new ConfigurationException("Not property can be empty");
+                throw new ConfigurationException(
+                    "Not property can be empty and classNumber should be a number");
             }
         }
         settings.setCodeTemplates(configuration.getTabTemplates());
         configuration.refresh(settings);
-        Messages.showMessageDialog("Restart to make change applied", "Save success", null);
+        Messages.showMessageDialog("Restart to make change applied", "Save Success", null);
     }
 
     @Override

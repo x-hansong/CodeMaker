@@ -90,4 +90,20 @@ public class CodeMakerUtil {
                         .getText(), returnType, psiMethod.getParameterList().getText());
                 }).collect(Collectors.toList());
     }
+
+    public static boolean isNumeric(String str) {
+        if (str == null) {
+            return false;
+        }
+
+        int length = str.length();
+
+        for (int i = 0; i < length; i++) {
+            if (!Character.isDigit(str.charAt(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiJavaFile;
 import com.xiaohansong.codemaker.ClassEntry;
@@ -65,20 +66,24 @@ public class CodeMakerAction extends AnAction {
         for (int i = 0; i < selectClasses.size(); i++) {
             map.put("class" + i, ClassEntry.create(selectClasses.get(i)));
         }
-        Date now = new Date();
-        map.put("YEAR", DateFormatUtils.format(now, "yyyy"));
-        map.put("TIME", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-        map.put("USER", System.getProperty("user.name"));
-        String className = VelocityUtil.evaluate(codeTemplate.getClassNameVm(), map);
-        map.put("ClassName", className);
+        try {
+            Date now = new Date();
+            map.put("YEAR", DateFormatUtils.format(now, "yyyy"));
+            map.put("TIME", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+            map.put("USER", System.getProperty("user.name"));
+            String className = VelocityUtil.evaluate(codeTemplate.getClassNameVm(), map);
+            map.put("ClassName", className);
 
-        String content = VelocityUtil.evaluate(codeTemplate.getCodeTemplate(), map);
+            String content = VelocityUtil.evaluate(codeTemplate.getCodeTemplate(), map);
+            // async write action
+            ApplicationManager.getApplication().runWriteAction(
+                new CreateFileAction(CodeMakerUtil.generateClassPath(
+                    CodeMakerUtil.getSourcePath(currentClass), className), content, anActionEvent
+                    .getDataContext()));
 
-        // async write action
-        ApplicationManager.getApplication().runWriteAction(
-            new CreateFileAction(CodeMakerUtil.generateClassPath(
-                CodeMakerUtil.getSourcePath(currentClass), className), content, anActionEvent
-                .getDataContext()));
+        } catch (Exception e) {
+            Messages.showMessageDialog(project, e.getMessage(), "Generate Failed", null);
+        }
 
     }
 }
