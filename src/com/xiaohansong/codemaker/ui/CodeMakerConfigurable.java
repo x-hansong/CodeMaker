@@ -3,7 +3,6 @@ package com.xiaohansong.codemaker.ui;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
-import com.intellij.openapi.ui.Messages;
 import com.xiaohansong.codemaker.CodeMakerSettings;
 import com.xiaohansong.codemaker.CodeTemplate;
 import org.jetbrains.annotations.Nls;
@@ -89,7 +88,6 @@ public class CodeMakerConfigurable implements SearchableConfigurable {
         }
         settings.setCodeTemplates(configuration.getTabTemplates());
         configuration.refresh(settings);
-        Messages.showMessageDialog("Restart to make change applied", "Save Success", null);
     }
 
     @Override
