@@ -32,10 +32,40 @@ The plugin support multiple class to generate one code, you can set the class nu
 
 # Configuration
 ![configure](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker3.png)
-- **Add template**: click "Add Tempalte" button to add a template, after saving changes, you need to restart idea to make changes work.
+- **Add template**: click "Add Tempalte" button to add a template, after saving changes.
 - **Delete template**: click "Delete Template" button to delete a template.
 
 ![property](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker2.png)
 - **classNumber**: The template context will contain the class which user select when trigger the generate action. for example, the number is 1, the template context only has the focused class: $class0; if the number is 2, when you trigger the generate action, you need select a class, then the template context will have two class entry: $class0, $class1
 - **className**: The class name support velocity and the template context.
 
+## Template Context
+```
+########################################################################################
+##
+## Common variables:
+##  $YEAR - yyyy
+##  $TIME - yyyy-MM-dd HH:mm:ss
+##  $USER - user.name
+##
+## Available variables:
+##  $class0 - the context class
+##  $class1 - the selected class, like $class2, $class2
+##  $ClassName - generate by the config of "Class Name", the generated class name
+##
+## Class Entry Structure:
+##  $class0.className - the class Name
+##  $class0.packageName - the packageName
+##  $class0.importList - the list of imported classes name
+##  $class0.fields - the list of the class fields
+##          - type: the field type
+##          - name: the field name
+##          - modifier: the field modifier, like "private"
+##  $class0.methods - the list of class methods
+##          - name: the method name
+##          - modifier: the method modifier, like "private static"
+##          - returnType: the method returnType
+##          - params: the method params, like "(String name)"
+##
+########################################################################################
+```
