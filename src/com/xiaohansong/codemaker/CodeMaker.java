@@ -1,12 +1,11 @@
 package com.xiaohansong.codemaker;
 
 import org.jetbrains.annotations.NotNull;
-
 import com.intellij.openapi.components.ApplicationComponent;
 
 /**
  * @author hansong.xhs
- * @version \$Id: com.xiaohansong.codemaker.CodeMaker.java, v 0.1 2017-01-19 обнГ10:18 hansong.xhs Exp $$
+ * @version \$Id: com.xiaohansong.codemaker.CodeMaker.java, v 0.1 2017-01-19 10:18 hansong.xhs Exp $$
  */
 public class CodeMaker implements ApplicationComponent {
     public CodeMaker() {

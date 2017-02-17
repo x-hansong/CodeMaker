@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * @author hansong.xhs
- * @version $Id: CodeMakerGroup.java, v 0.1 2017-01-28 обнГ9:25 hansong.xhs Exp $$
+ * @version $Id: CodeMakerGroup.java, v 0.1 2017-01-28 9:25 hansong.xhs Exp $$
  */
 public class CodeMakerGroup extends ActionGroup implements DumbAware {
 

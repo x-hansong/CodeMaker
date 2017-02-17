@@ -15,7 +15,7 @@ import java.awt.*;
 
 /**
  * @author hansong.xhs
- * @version $Id: TemplateEditPane.java, v 0.1 2017-01-31 обнГ9:06 hansong.xhs Exp $$
+ * @version $Id: TemplateEditPane.java, v 0.1 2017-01-31 9:06 hansong.xhs Exp $$
  */
 public class TemplateEditPane {
 

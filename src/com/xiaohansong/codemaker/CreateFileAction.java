@@ -17,7 +17,7 @@ import java.io.FileWriter;
 
 /**
  * @author hansong.xhs
- * @version $Id: CreateFileAction.java, v 0.1 2017-01-21 обнГ11:44 hansong.xhs Exp $$
+ * @version $Id: CreateFileAction.java, v 0.1 2017-01-21 11:44 hansong.xhs Exp $$
  */
 public class CreateFileAction implements Runnable {
 

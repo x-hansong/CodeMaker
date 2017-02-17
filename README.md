@@ -13,6 +13,7 @@ The output class will be created at the source path of origin class. The followi
 
 # Installtion
 Download [CodeMaker.zip](https://github.com/x-hansong/CodeMaker/releases/download/1.0/CodeMaker.zip)
+Or search 'CodeMaker' in Idea plugins
 
 To install a plugin from the disk in idea
 

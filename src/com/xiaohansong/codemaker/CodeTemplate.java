@@ -4,7 +4,7 @@ import com.intellij.openapi.util.text.StringUtil;
 
 /**
  * @author hansong.xhs
- * @version $Id: CodeTemplate.java, v 0.1 2017-01-28 обнГ9:41 hansong.xhs Exp $$
+ * @version $Id: CodeTemplate.java, v 0.1 2017-01-28 9:41 hansong.xhs Exp $$
  */
 public class CodeTemplate {
 

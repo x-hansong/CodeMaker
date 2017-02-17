@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
+    }
+}
+
+plugins {
+    id "org.jetbrains.intellij" version "0.2.5"
+}
+
+
+apply plugin: 'java'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+sourceSets {
+    main {
+        java.srcDirs 'src'
+        resources.srcDirs 'resources'
+    }
+    test {
+        java.srcDirs 'test'
+        resources.srcDirs 'test-resources'
+    }
+}
+
+intellij {
+    version 'IU-143.2370.31'
+    pluginName 'CodeMaker'
+    updateSinceUntilBuild false
+}
+
+group 'com.xiaohansong'
+version '1.0.0'
+

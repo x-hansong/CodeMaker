@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * @author hansong.xhs
- * @version $Id: CodeMakerSettings.java, v 0.1 2017-01-28 обнГ9:30 hansong.xhs Exp $$
+ * @version $Id: CodeMakerSettings.java, v 0.1 2017-01-28 9:30 hansong.xhs Exp $$
  */
 @State(name = "CodeMakerSettings", storages = { @Storage(id = "app-default", file = "$APP_CONFIG$/CodeMaker-settings.xml") })
 public class CodeMakerSettings implements PersistentStateComponent<CodeMakerSettings> {

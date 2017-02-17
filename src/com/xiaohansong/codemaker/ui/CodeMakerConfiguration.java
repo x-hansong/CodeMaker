@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * @author hansong.xhs
- * @version $Id: CodeMakerConfiguration.java, v 0.1 2017-02-01 ионГ11:32 hansong.xhs Exp $$
+ * @version $Id: CodeMakerConfiguration.java, v 0.1 2017-02-01 11:32 hansong.xhs Exp $$
  */
 public class CodeMakerConfiguration {
     private JPanel                        mainPane;

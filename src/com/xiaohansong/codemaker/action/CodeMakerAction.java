@@ -25,7 +25,7 @@ import java.util.Map;
 
 /**
  * @author hansong.xhs
- * @version $Id: CodeMakerAction.java, v 0.1 2017-01-28 обнГ9:23 hansong.xhs Exp $$
+ * @version $Id: CodeMakerAction.java, v 0.1 2017-01-28 9:23 hansong.xhs Exp $$
  */
 public class CodeMakerAction extends AnAction {
     private CodeMakerSettings settings;

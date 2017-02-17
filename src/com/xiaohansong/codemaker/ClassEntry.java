@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @author hansong.xhs
- * @version $Id: ClassEntry.java, v 0.1 2017-01-22 обнГ9:53 hansong.xhs Exp $$
+ * @version $Id: ClassEntry.java, v 0.1 2017-01-22 9:53 hansong.xhs Exp $$
  */
 public class ClassEntry {
 
