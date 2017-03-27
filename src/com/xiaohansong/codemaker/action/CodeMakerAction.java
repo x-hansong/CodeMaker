@@ -1,10 +1,18 @@
 package com.xiaohansong.codemaker.action;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.DumbAware;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiClass;
@@ -17,18 +25,14 @@ import com.xiaohansong.codemaker.util.CodeMakerUtil;
 import com.xiaohansong.codemaker.util.VelocityUtil;
 import org.apache.commons.lang.time.DateFormatUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author hansong.xhs
  * @version $Id: CodeMakerAction.java, v 0.1 2017-01-28 9:23 hansong.xhs Exp $$
  */
-public class CodeMakerAction extends AnAction {
+public class CodeMakerAction extends AnAction implements DumbAware {
+
     private CodeMakerSettings settings;
+
     private String            templateKey;
 
     public CodeMakerAction(String templateKey) {
@@ -38,9 +42,20 @@ public class CodeMakerAction extends AnAction {
         getTemplatePresentation().setText(templateKey, false);
     }
 
+    /**
+     * @see com.intellij.openapi.actionSystem.AnAction#actionPerformed(com.intellij.openapi.actionSystem.AnActionEvent)
+     */
     @Override
     public void actionPerformed(AnActionEvent anActionEvent) {
         Project project = anActionEvent.getProject();
+        if (project == null) {
+            return;
+        }
+        DumbService dumbService = DumbService.getInstance(project);
+        if (dumbService.isDumb()) {
+            dumbService.showDumbModeNotification("CodeMaker plugin is not available during indexing");
+            return;
+        }
         PsiJavaFile javaFile = (PsiJavaFile) anActionEvent.getData(PlatformDataKeys.PSI_FILE);
         if (javaFile == null) {
             return;
@@ -77,9 +92,9 @@ public class CodeMakerAction extends AnAction {
             String content = VelocityUtil.evaluate(codeTemplate.getCodeTemplate(), map);
             // async write action
             ApplicationManager.getApplication().runWriteAction(
-                new CreateFileAction(CodeMakerUtil.generateClassPath(
-                    CodeMakerUtil.getSourcePath(currentClass), className), content, anActionEvent
-                    .getDataContext()));
+                    new CreateFileAction(CodeMakerUtil.generateClassPath(
+                            CodeMakerUtil.getSourcePath(currentClass), className), content, anActionEvent
+                            .getDataContext()));
 
         } catch (Exception e) {
             Messages.showMessageDialog(project, e.getMessage(), "Generate Failed", null);

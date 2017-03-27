@@ -1,5 +1,8 @@
 package com.xiaohansong.codemaker.action;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -11,9 +14,6 @@ import com.intellij.openapi.project.Project;
 import com.xiaohansong.codemaker.CodeMakerSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author hansong.xhs
@@ -27,6 +27,9 @@ public class CodeMakerGroup extends ActionGroup implements DumbAware {
         settings = ServiceManager.getService(CodeMakerSettings.class);
     }
 
+    /**
+     * @see com.intellij.openapi.actionSystem.ActionGroup#getChildren(com.intellij.openapi.actionSystem.AnActionEvent)
+     */
     @NotNull
     @Override
     public AnAction[] getChildren(@Nullable AnActionEvent anActionEvent) {

@@ -11,7 +11,7 @@ The output class will be created at the source path of origin class. The followi
 - Generate the converter class for the model class and the persistent class.
 - Support add custom template to generate more code.
 
-# Installtion
+# Install
 Download [CodeMaker.zip](https://github.com/x-hansong/CodeMaker/releases/download/1.0/CodeMaker.zip)
 Or search 'CodeMaker' in Idea plugins
 
@@ -61,12 +61,23 @@ The plugin support multiple class to generate one code, you can set the class nu
 ##  $class0.fields - the list of the class fields
 ##          - type: the field type
 ##          - name: the field name
-##          - modifier: the field modifier, like "private"
+##          - modifier: the field modifier, like "private",or "@Setter private" if include annotations
+##  $class0.allFields - the list of the class fields include all fields of superclass
+##          - type: the field type
+##          - name: the field name
+##          - modifier: the field modifier, like "private",or "@Setter private" if include annotations
 ##  $class0.methods - the list of class methods
 ##          - name: the method name
 ##          - modifier: the method modifier, like "private static"
 ##          - returnType: the method returnType
 ##          - params: the method params, like "(String name)"
-##
+##  $class0.allMethods - the list of class methods include all methods of superclass
+##          - name: the method name
+##          - modifier: the method modifier, like "private static"
+##          - returnType: the method returnType
+##          - params: the method params, like "(String name)"#
 ########################################################################################
 ```
+
+## More features
+- Generate @see doc for override method

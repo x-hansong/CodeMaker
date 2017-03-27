@@ -17,22 +17,26 @@
 ##  $class0.fields - the list of the class fields
 ##          - type: the field type
 ##          - name: the field name
-##          - modifier: the field modifier, like "private"
+##          - modifier: the field modifier, like "private",or "@Setter private" if include annotations
+##  $class0.allFields - the list of the class fields include all fields of superclass
+##          - type: the field type
+##          - name: the field name
+##          - modifier: the field modifier, like "private",or "@Setter private" if include annotations
 ##  $class0.methods - the list of class methods
 ##          - name: the method name
 ##          - modifier: the method modifier, like "private static"
 ##          - returnType: the method returnType
 ##          - params: the method params, like "(String name)"
-##
+##  $class0.allMethods - the list of class methods include all methods of superclass
+##          - name: the method name
+##          - modifier: the method modifier, like "private static"
+##          - returnType: the method returnType
+##          - params: the method params, like "(String name)"#
 ########################################################################################
 #macro (cap $strIn)$strIn.valueOf($strIn.charAt(0)).toUpperCase()$strIn.substring(1)#end
 #macro (low $strIn)$strIn.valueOf($strIn.charAt(0)).toLowerCase()$strIn.substring(1)#end
 #set($class0Var = "#low(${class0.ClassName})")
 #set($class1Var = "#low(${class1.ClassName})")
-/**
-* Alipay.com Inc.
-* Copyright (c) 2004-$YEAR All Rights Reserved.
-*/
 package $class0.PackageName;
 
 #foreach($importer in $class0.ImportList)
