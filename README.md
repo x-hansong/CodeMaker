@@ -12,8 +12,8 @@ The output class will be created at the source path of origin class. The followi
 - Support add custom template to generate more code.
 
 # Install
-Download [CodeMaker.zip](https://github.com/x-hansong/CodeMaker/releases/download/1.0/CodeMaker.zip)
-Or search 'CodeMaker' in Idea plugins
+1. Search 'CodeMaker' in Idea plugins
+2. Download [Releases](https://github.com/x-hansong/CodeMaker/releases)
 
 To install a plugin from the disk in idea
 
