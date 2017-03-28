@@ -10,6 +10,7 @@ The output class will be created at the source path of origin class. The followi
 - Generate the model class for the persistent class.
 - Generate the converter class for the model class and the persistent class.
 - Support add custom template to generate more code.
+- Generate `@see` doc for override method
 
 # Install
 1. Search 'CodeMaker' in Idea plugins
@@ -25,7 +26,7 @@ To install a plugin from the disk in idea
 
 # Usage
 This plugin generates code from right click 'Generate...' menu while focused on a java class. 
-![Generage](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker0.png)
+![Generate](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker0.png)
 
 The plugin support multiple class to generate one code, you can set the class number of template to select multiple classes to use.
 
@@ -78,6 +79,3 @@ The plugin support multiple class to generate one code, you can set the class nu
 ##          - params: the method params, like "(String name)"#
 ########################################################################################
 ```
-
-## More features
-- Generate @see doc for override method
