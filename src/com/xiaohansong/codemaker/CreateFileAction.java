@@ -6,7 +6,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
@@ -21,14 +20,16 @@ import java.io.FileWriter;
  */
 public class CreateFileAction implements Runnable {
 
-    /** logger */
+    /**
+     * logger
+     */
     private static final Logger LOGGER = CodeMakerUtil.getLogger(CreateFileAction.class);
 
-    private String              outputFile;
+    private String outputFile;
 
-    private String              content;
+    private String content;
 
-    private DataContext         dataContext;
+    private DataContext dataContext;
 
     public CreateFileAction(String outputFile, String content, DataContext dataContext) {
         this.outputFile = outputFile;
@@ -42,21 +43,13 @@ public class CreateFileAction implements Runnable {
             VirtualFileManager manager = VirtualFileManager.getInstance();
             VirtualFile virtualFile = manager
                 .refreshAndFindFileByUrl(VfsUtil.pathToUrl(outputFile));
-            int overwriteInd;
 
             if (virtualFile != null && virtualFile.exists()) {
-                overwriteInd = Messages.showYesNoDialog("Overwrite?", "File Exists", null);
-                switch (overwriteInd) {
-                    case Messages.OK:
-                        virtualFile.setBinaryContent(content.getBytes());
-                        break;
-                    case Messages.NO:
-                        return;
-                }
+                virtualFile.setBinaryContent(content.getBytes());
             } else {
                 File file = new File(outputFile);
                 if (!file.getParentFile().exists()) {
-                    file.getParentFile().mkdir();
+                    file.getParentFile().mkdirs();
                 }
                 FileWriter fileWriter = null;
                 try {

@@ -1,8 +1,5 @@
 package com.xiaohansong.codemaker;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
@@ -10,7 +7,12 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author hansong.xhs
@@ -29,18 +31,25 @@ public class CodeMakerSettings implements PersistentStateComponent<CodeMakerSett
 
     private void loadDefaultSettings() {
         try {
-            String converterVm = FileUtil.loadTextAndClose(CodeMakerSettings.class.getResourceAsStream("/template/Converter.vm"));
-            String modelVm = FileUtil.loadTextAndClose(CodeMakerSettings.class.getResourceAsStream("/template/Model.vm"));
             Map<String, CodeTemplate> codeTemplates = new HashMap<>();
-            codeTemplates.put("Converter", new CodeTemplate("Converter",
-                    "${class0.className}Converter", converterVm, 2));
-            codeTemplates.put("Model", new CodeTemplate("Model",
-                    "#set($end = ${class0.className.length()} - 2)${class0.className.substring(0,${end})}",
-                    modelVm, 1));
+            codeTemplates.put("Model",
+                    createCodeTemplate("Model.vm",
+                            "#set($end = ${class0.className.length()} - 2)${class0.className.substring(0,${end})}", 1));
+            codeTemplates.put("Model",
+                    createCodeTemplate("Converter.vm", "${class0.className}Converter", 2));
+            codeTemplates.put("Specs2 Matcher",
+                    createCodeTemplate("specs2-matcher.vm", "${class0.className}Matchers", 1));
             this.codeTemplates = codeTemplates;
         } catch (Exception e) {
             LOGGER.error("loadDefaultSettings failed", e);
         }
+    }
+
+    @NotNull
+    private CodeTemplate createCodeTemplate(String sourceTemplateName, String classNameVm, int classNumber) throws IOException {
+        String velocityTemplate = FileUtil.loadTextAndClose(CodeMakerSettings.class.getResourceAsStream("/template/" + sourceTemplateName));
+        return new CodeTemplate(sourceTemplateName,
+                classNameVm, velocityTemplate, classNumber);
     }
 
     /**

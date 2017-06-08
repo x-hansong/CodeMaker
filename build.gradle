@@ -6,7 +6,7 @@ buildscript {
 }
 
 plugins {
-    id "org.jetbrains.intellij" version "0.2.5"
+    id "org.jetbrains.intellij" version "0.2.7"
 }
 
 repositories {
@@ -33,11 +33,12 @@ sourceSets {
 }
 
 intellij {
-    version 'IU-143.2370.31'
+    version 'IU-171.3780.107'
     pluginName 'CodeMaker'
     updateSinceUntilBuild false
+    plugins = ["org.intellij.scala:2017.1.15"]
 }
 
 group 'com.xiaohansong'
-version '1.1'
+version '1.2.2'
 

@@ -1,12 +1,14 @@
 package com.xiaohansong.codemaker;
 
-import java.util.List;
-
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.*;
 import com.xiaohansong.codemaker.util.CodeMakerUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.jetbrains.plugins.scala.lang.psi.api.ScalaFile;
+import org.jetbrains.plugins.scala.lang.psi.api.toplevel.typedef.ScClass;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author hansong.xhs
@@ -29,6 +31,8 @@ public class ClassEntry {
     private List<Method> methods;
 
     private List<Method> allMethods;
+
+    private List<String> typeParams = Collections.emptyList();
 
     @Data
     @AllArgsConstructor
@@ -80,15 +84,26 @@ public class ClassEntry {
     }
 
     public static ClassEntry create(PsiClass psiClass) {
-        PsiJavaFile javaFile = (PsiJavaFile) psiClass.getContainingFile();
+        PsiFile psiFile = psiClass.getContainingFile();
         ClassEntry classEntry = new ClassEntry();
         classEntry.setClassName(psiClass.getName());
-        classEntry.setPackageName(javaFile.getPackageName());
-        classEntry.setImportList(CodeMakerUtil.getImportList(javaFile));
-        classEntry.setFields(CodeMakerUtil.getFields(psiClass));
-        classEntry.setAllFields(CodeMakerUtil.getAllFields(psiClass));
+        classEntry.setPackageName(((PsiClassOwner)psiFile).getPackageName());
+        if(psiFile instanceof PsiJavaFile)
+        {
+            classEntry.setFields(CodeMakerUtil.getFields(psiClass));
+            classEntry.setImportList(CodeMakerUtil.getImportList((PsiJavaFile) psiFile));
+            classEntry.setAllFields(CodeMakerUtil.getAllFields(psiClass));
+        }
+        else if(psiClass instanceof ScClass) {
+            ScClass scalaClass = (ScClass) psiClass;
+            classEntry.setFields(CodeMakerUtil.getScalaClassFields(scalaClass));
+            classEntry.setImportList(CodeMakerUtil.getScalaImportList((ScalaFile)psiFile));
+        }
+
+
         classEntry.setMethods(CodeMakerUtil.getMethods(psiClass));
         classEntry.setAllMethods(CodeMakerUtil.getAllMethods(psiClass));
+        classEntry.setTypeParams(CodeMakerUtil.getClassTypeParameters(psiClass));
         return classEntry;
     }
 

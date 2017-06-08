@@ -1,23 +1,25 @@
 package com.xiaohansong.codemaker.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.Lists;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiImportList;
-import com.intellij.psi.PsiImportStatement;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiMethod;
+import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.xiaohansong.codemaker.ClassEntry;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.plugins.scala.lang.psi.api.ScalaFile;
+import org.jetbrains.plugins.scala.lang.psi.api.statements.params.ScClassParameter;
+import org.jetbrains.plugins.scala.lang.psi.api.toplevel.imports.ScImportStmt;
+import org.jetbrains.plugins.scala.lang.psi.api.toplevel.typedef.ScClass;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static scala.collection.JavaConversions.seqAsJavaList;
 
 /**
  * @author hansong.xhs
@@ -39,12 +41,22 @@ public class CodeMakerUtil {
     }
 
     public static String getSourcePath(PsiClass clazz) {
-        String classPath = clazz.getContainingFile().getVirtualFile().getPath();
+        PsiFile containingFile = clazz.getContainingFile();
+        return getSourcePath(containingFile);
+    }
+
+    @NotNull
+    public static String getSourcePath(PsiFile psiFile) {
+        String classPath = psiFile.getVirtualFile().getPath();
         return classPath.substring(0, classPath.lastIndexOf('/'));
     }
 
     public static String generateClassPath(String sourcePath, String className) {
-        return sourcePath + "/" + className + ".java";
+        return generateClassPath(sourcePath, className, "java");
+    }
+
+    public static String generateClassPath(String sourcePath, String className, String extension) {
+        return sourcePath + "/" + className + "." + extension;
     }
 
     public static List<String> getImportList(PsiJavaFile javaFile) {
@@ -54,6 +66,13 @@ public class CodeMakerUtil {
         }
         return Arrays.stream(importList.getImportStatements())
                 .map(PsiImportStatement::getQualifiedName).collect(Collectors.toList());
+    }
+
+    public static List<String> getScalaImportList(ScalaFile scalaFile) {
+        List<ScImportStmt> scImportStmts = seqAsJavaList(scalaFile.importStatementsInHeader());
+        return scImportStmts.stream()
+                .flatMap(stmt -> seqAsJavaList(stmt.importExprs()).stream()
+                        .map(expr -> expr.getText())).collect(Collectors.toList());
     }
 
     public static List<ClassEntry.Field> getFields(PsiClass psiClass) {
@@ -98,10 +117,10 @@ public class CodeMakerUtil {
                         }).collect(Collectors.toList());
     }
 
+
+
     /**
      * find the method belong to  name
-     * @param interfaces
-     * @param psiMethod
      * @return null if not found
      */
     public static String findClassNameOfSuperMethod(PsiMethod psiMethod) {
@@ -142,5 +161,21 @@ public class CodeMakerUtil {
         }
 
         return true;
+    }
+
+    public static List<ClassEntry.Field> getScalaClassFields(ScClass scalaClass) {
+        return seqAsJavaList(scalaClass.allVals())
+                .stream()
+                .filter(tuple -> tuple._1() instanceof ScClassParameter)
+                .map(tuple -> {
+                    ScClassParameter val = (ScClassParameter) tuple._1();
+                    return new ClassEntry.Field(val.paramType().get().getText(),
+                            val.name(), val.getModifierList().getText());
+                })
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> getClassTypeParameters(PsiClass psiClass) {
+        return Arrays.stream(psiClass.getTypeParameters()).map(PsiNamedElement::getName).collect(Collectors.toList());
     }
 }
