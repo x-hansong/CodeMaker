@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.xiaohansong.codemaker</id>
     <name>CodeMaker</name>
-    <version>1.0</version>
+    <version>1.2</version>
     <vendor email="hansong.xhs@gmail.com" url="https://github.com/x-hansong/CodeMaker">Personal</vendor>
 
     <description><![CDATA[
@@ -20,6 +20,7 @@
     <change-notes><![CDATA[
       version 1.0<br>
       version 1.1 add action "Generate @see doc for override method"<br>
+      version 1.2 Added Scala support<br>
     ]]>
     </change-notes>
 
@@ -32,6 +33,7 @@
     <depends>com.intellij.modules.lang</depends>
     -->
     <depends>com.intellij.modules.java</depends>
+    <depends optional="true">org.intellij.scala</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
