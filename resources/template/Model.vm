@@ -6,8 +6,8 @@
 ##  $USER - user.name
 ##
 ## Available variables:
-##  $class0 - the context class
-##  $class1 - the selected class, like $class2, $class2
+##  $class0 - the context class, alias: $class
+##  $class1 - the selected class, like $class1, $class2
 ##  $ClassName - generate by the config of "Class Name", the generated class name
 ##
 ## Class Entry Structure:

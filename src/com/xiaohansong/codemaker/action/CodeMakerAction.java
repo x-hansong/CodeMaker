@@ -2,7 +2,7 @@ package com.xiaohansong.codemaker.action;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -41,7 +41,7 @@ public class CodeMakerAction extends AnAction implements DumbAware {
 
     private CodeMakerSettings settings;
 
-    private String            templateKey;
+    private String templateKey;
 
     CodeMakerAction(String templateKey) {
         this.settings = ServiceManager.getService(CodeMakerSettings.class);
@@ -66,18 +66,12 @@ public class CodeMakerAction extends AnAction implements DumbAware {
         }
         CodeTemplate codeTemplate = settings.getCodeTemplate(templateKey);
 
-        PsiElement psiElement = anActionEvent.getData(PlatformDataKeys.PSI_ELEMENT);
-        log.info("current pisElement: "+psiElement.getClass().getName() + "("+psiElement+")");
-        while(psiElement!= null && !(psiElement instanceof PsiClass))
-        {
-            psiElement = psiElement.getParent();
-        }
-
-        if(psiElement == null)
-        {
-            Messages.showMessageDialog(project, "Please select a class", "Generate Failed", null);
+        PsiElement psiElement = anActionEvent.getData(LangDataKeys.PSI_ELEMENT);
+        if (psiElement == null || !(psiElement instanceof PsiClass)) {
+            Messages.showMessageDialog(project, "Please focus on a class", "Generate Failed", null);
             return;
         }
+        log.info("current pisElement: " + psiElement.getClass().getName() + "(" + psiElement + ")");
 
         PsiClass psiClass = (PsiClass) psiElement;
         String language = psiElement.getLanguage().getID().toLowerCase();
@@ -88,45 +82,20 @@ public class CodeMakerAction extends AnAction implements DumbAware {
             return;
         }
 
-        Map<String, Object> map = new HashMap<>();
-        for (int i = 0; i < selectClasses.size(); i++) {
-            map.put("class" + i, selectClasses.get(i));
-        }
         try {
-            Date now = new Date();
-            map.put("class", selectClasses.get(0));
-            map.put("YEAR", DateFormatUtils.format(now, "yyyy"));
-            map.put("TIME", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-            map.put("USER", System.getProperty("user.name"));
-            String className = VelocityUtil.evaluate(codeTemplate.getClassNameVm(), map);
-            map.put("ClassName", className);
-            map.put("utils", new Utils());
-            map.put("BR", "\n");
+            String content = generateCode(codeTemplate, selectClasses);
+            ClassEntry currentClass = selectClasses.get(0);
+            VirtualFile sourceRoot = findSourceRoot(currentClass, project, psiElement);
 
-            String content = VelocityUtil.evaluate(codeTemplate.getCodeTemplate(), map);
-
-            String packageName = selectClasses.get(0).getPackageName();
-            final PackageWrapper targetPackage = new PackageWrapper(PsiManager.getInstance(project), packageName);
-            List<VirtualFile> suitableRoots = JavaProjectRootsUtil.getSuitableDestinationSourceRoots(project);
-            VirtualFile sourceRoot = null;
-            if(suitableRoots.size() > 1) {
-                sourceRoot = MoveClassesOrPackagesUtil.chooseSourceRoot(targetPackage, suitableRoots,
-                        psiElement.getContainingFile().getContainingDirectory());
-
-            }
-            else if(suitableRoots.size() == 1){
-                sourceRoot = suitableRoots.get(0);
-            }
-
-            if (sourceRoot!= null) {
-                String sourcePath = sourceRoot.getPath() + "/" + packageName.replace(".","/");
-                String targetPath = CodeMakerUtil.generateClassPath(sourcePath, className, language);
+            if (sourceRoot != null) {
+                String sourcePath = sourceRoot.getPath() + "/" + currentClass.getPackageName().replace(".", "/");
+                String targetPath = CodeMakerUtil.generateClassPath(sourcePath, currentClass.getClassName(), language);
 
                 VirtualFileManager manager = VirtualFileManager.getInstance();
                 VirtualFile virtualFile = manager
                         .refreshAndFindFileByUrl(VfsUtil.pathToUrl(targetPath));
 
-                if(virtualFile == null || !virtualFile.exists() || userConfirmedOverride()) {
+                if (virtualFile == null || !virtualFile.exists() || userConfirmedOverride()) {
                     // async write action
                     ApplicationManager.getApplication().runWriteAction(
                             new CreateFileAction(targetPath, content, anActionEvent
@@ -137,6 +106,45 @@ public class CodeMakerAction extends AnAction implements DumbAware {
         } catch (Exception e) {
             Messages.showMessageDialog(project, e.getMessage(), "Generate Failed", null);
         }
+    }
+
+    private String generateCode(CodeTemplate codeTemplate, List<ClassEntry> selectClasses) {
+        Map<String, Object> map = new HashMap<>();
+        for (int i = 0; i < selectClasses.size(); i++) {
+            map.put("class" + i, selectClasses.get(i));
+        }
+        Date now = new Date();
+        map.put("class", selectClasses.get(0));
+        map.put("YEAR", DateFormatUtils.format(now, "yyyy"));
+        map.put("TIME", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put("USER", System.getProperty("user.name"));
+        String className = VelocityUtil.evaluate(codeTemplate.getClassNameVm(), map);
+        map.put("ClassName", className);
+        map.put("utils", new Utils());
+        map.put("BR", "\n");
+
+        return VelocityUtil.evaluate(codeTemplate.getCodeTemplate(), map);
+    }
+
+    /**
+     * allow user to select the generated code source root
+     * @param classEntry
+     * @param project
+     * @param psiElement
+     * @return
+     */
+    private VirtualFile findSourceRoot(ClassEntry classEntry, Project project, PsiElement psiElement) {
+        String packageName = classEntry.getPackageName();
+        final PackageWrapper targetPackage = new PackageWrapper(PsiManager.getInstance(project), packageName);
+        List<VirtualFile> suitableRoots = JavaProjectRootsUtil.getSuitableDestinationSourceRoots(project);
+        if (suitableRoots.size() > 1) {
+            return MoveClassesOrPackagesUtil.chooseSourceRoot(targetPackage, suitableRoots,
+                    psiElement.getContainingFile().getContainingDirectory());
+
+        } else if (suitableRoots.size() == 1) {
+            return suitableRoots.get(0);
+        }
+        return null;
     }
 
     private boolean userConfirmedOverride() {
@@ -160,21 +168,21 @@ public class CodeMakerAction extends AnAction implements DumbAware {
     }
 
     public static class Utils {
-       public String mkString(Collection<?> list, String delimiter, String prefix, String suffix) {
-          if(list.isEmpty())
-              return "";
-          else
-              return list.stream()
-                  .map(Object::toString)
-                  .collect(Collectors.joining(delimiter, prefix, suffix));
-       }
+        public String mkString(Collection<?> list, String delimiter, String prefix, String suffix) {
+            if (list.isEmpty())
+                return "";
+            else
+                return list.stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining(delimiter, prefix, suffix));
+        }
 
-       public String delim(Collection<?> list, int velocityCount, String delim) {
-           if(velocityCount < list.size())
-               return delim;
-           else
-               return "";
-       }
+        public String delim(Collection<?> list, int velocityCount, String delim) {
+            if (velocityCount < list.size())
+                return delim;
+            else
+                return "";
+        }
 
     }
 

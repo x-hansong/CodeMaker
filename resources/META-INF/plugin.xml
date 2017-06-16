@@ -6,21 +6,22 @@
 
     <description><![CDATA[
     <p>This plugin generates code from right click 'Generate...' menu while focused
-    on a java class. The output class can be customized using a provided velocity template to format
+    on a java/scala class. The output class can be customized using a provided velocity template to format
     the code based on the origin class and optional selected classes.</p>
-    <p>The output class will be created at the source path of origin class. The following features are available: </p>
+    <p>The following features are available: </p>
     <ul>
       <li>Generate the model class for the persistent class.</li>
       <li>Generate the converter class for the model class and the persistent class.</li>
       <li>Support add custom template to generate more code.</li>
       <li>Generate @see doc for override method</li>
     </ul>
+    <p>If you want to add variables into template context, you can modified the source and package the plugin to meet your needs. See <a href="https://github.com/x-hansong/CodeMaker/blob/master/README.md">README</a></p>
     ]]></description>
 
     <change-notes><![CDATA[
       version 1.0<br>
       version 1.1 add action "Generate @see doc for override method"<br>
-      version 1.2 Added Scala support<br>
+      version 1.2 Added Scala support, support selecting destination source root for the generated class. Thanks to @dkarlinsky<br>
     ]]>
     </change-notes>
 
