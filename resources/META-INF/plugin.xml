@@ -15,7 +15,7 @@
       <li>Support add custom template to generate more code.</li>
       <li>Generate @see doc for override method</li>
     </ul>
-    <p>If you want to add variables into template context, you can modified the source and package the plugin to meet your needs. See <a href="https://github.com/x-hansong/CodeMaker/blob/master/README.md">README</a></p>
+    <p>If you want to add variables into template context, you can modified the source and package the plugin to meet your needs. See <a href="https://github.com/x-hansong/CodeMaker/blob/master/README.md#advance">README</a></p>
     ]]></description>
 
     <change-notes><![CDATA[
