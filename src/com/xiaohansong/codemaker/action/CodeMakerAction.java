@@ -83,13 +83,27 @@ public class CodeMakerAction extends AnAction implements DumbAware {
         }
 
         try {
-            String content = generateCode(codeTemplate, selectClasses);
+            Map<String, Object> map = new HashMap<>();
+            for (int i = 0; i < selectClasses.size(); i++) {
+                map.put("class" + i, selectClasses.get(i));
+            }
+            Date now = new Date();
+            map.put("class", selectClasses.get(0));
+            map.put("YEAR", DateFormatUtils.format(now, "yyyy"));
+            map.put("TIME", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+            map.put("USER", System.getProperty("user.name"));
+            String className = VelocityUtil.evaluate(codeTemplate.getClassNameVm(), map);
+            map.put("ClassName", className);
+            map.put("utils", new Utils());
+            map.put("BR", "\n");
+
+            String content = VelocityUtil.evaluate(codeTemplate.getCodeTemplate(), map);
             ClassEntry currentClass = selectClasses.get(0);
             VirtualFile sourceRoot = findSourceRoot(currentClass, project, psiElement);
 
             if (sourceRoot != null) {
                 String sourcePath = sourceRoot.getPath() + "/" + currentClass.getPackageName().replace(".", "/");
-                String targetPath = CodeMakerUtil.generateClassPath(sourcePath, currentClass.getClassName(), language);
+                String targetPath = CodeMakerUtil.generateClassPath(sourcePath, className, language);
 
                 VirtualFileManager manager = VirtualFileManager.getInstance();
                 VirtualFile virtualFile = manager
@@ -98,7 +112,7 @@ public class CodeMakerAction extends AnAction implements DumbAware {
                 if (virtualFile == null || !virtualFile.exists() || userConfirmedOverride()) {
                     // async write action
                     ApplicationManager.getApplication().runWriteAction(
-                            new CreateFileAction(targetPath, content, anActionEvent
+                            new CreateFileAction(targetPath, content, codeTemplate.getFileEncoding(), anActionEvent
                                     .getDataContext()));
                 }
             }
@@ -106,24 +120,6 @@ public class CodeMakerAction extends AnAction implements DumbAware {
         } catch (Exception e) {
             Messages.showMessageDialog(project, e.getMessage(), "Generate Failed", null);
         }
-    }
-
-    private String generateCode(CodeTemplate codeTemplate, List<ClassEntry> selectClasses) {
-        Map<String, Object> map = new HashMap<>();
-        for (int i = 0; i < selectClasses.size(); i++) {
-            map.put("class" + i, selectClasses.get(i));
-        }
-        Date now = new Date();
-        map.put("class", selectClasses.get(0));
-        map.put("YEAR", DateFormatUtils.format(now, "yyyy"));
-        map.put("TIME", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-        map.put("USER", System.getProperty("user.name"));
-        String className = VelocityUtil.evaluate(codeTemplate.getClassNameVm(), map);
-        map.put("ClassName", className);
-        map.put("utils", new Utils());
-        map.put("BR", "\n");
-
-        return VelocityUtil.evaluate(codeTemplate.getCodeTemplate(), map);
     }
 
     /**

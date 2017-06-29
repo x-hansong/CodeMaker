@@ -1,7 +1,6 @@
 package com.xiaohansong.codemaker.ui;
 
 import com.intellij.ui.components.JBTabbedPane;
-import com.intellij.uiDesigner.core.GridConstraints;
 import com.xiaohansong.codemaker.CodeMakerSettings;
 import com.xiaohansong.codemaker.CodeTemplate;
 
@@ -31,9 +30,13 @@ public class CodeMakerConfiguration {
             editPaneMap.put(title, editPane);
         });
         resetTabPane(settings);
-        GridConstraints constraints = new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST,
-            GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW,
-            GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, 300), null, 0, true);
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 1;
+        constraints.weighty = 1;
         mainPane.add(tabbedPane, constraints);
     }
 
@@ -55,7 +58,7 @@ public class CodeMakerConfiguration {
         Map<String, CodeTemplate> map = new HashMap<>();
         editPaneMap.forEach((key, value) -> {
             CodeTemplate codeTemplate = new CodeTemplate(value.getTemplateName(), value
-                .getClassName(), value.getTemplate(), value.getClassNumber());
+                    .getClassName(), value.getTemplate(), value.getClassNumber(), value.getFileEncoding());
             map.put(codeTemplate.getName(), codeTemplate);
         });
         return map;

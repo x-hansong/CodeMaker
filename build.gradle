@@ -16,6 +16,7 @@ repositories {
 
 dependencies {
     compile group: 'org.projectlombok', name: 'lombok', version: '1.16.14'
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
 }
 
 apply plugin: 'java'

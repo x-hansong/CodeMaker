@@ -12,6 +12,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class CodeTemplate {
 
+    public static final String DEFAULT_ENCODING = "UTF-8";
+
     public CodeTemplate() {}
 
     /**
@@ -34,40 +36,16 @@ public class CodeTemplate {
      */
     private int classNumber;
 
+    /**
+     * the encoding of the generated file
+     */
+    private String fileEncoding;
+
     public boolean isValid() {
         return StringUtil.isNotEmpty(getClassNameVm()) && StringUtil.isNotEmpty(getName())
-                && StringUtil.isNotEmpty(getCodeTemplate()) && classNumber != -1;
+                && StringUtil.isNotEmpty(getCodeTemplate()) && classNumber != -1 && StringUtil.isNotEmpty(getFileEncoding());
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
-
-        CodeTemplate that = (CodeTemplate) o;
-
-        if (classNumber != that.classNumber) { return false; }
-        if (name != null ? !name.equals(that.name) : that.name != null) { return false; }
-        if (classNameVm != null ? !classNameVm.equals(that.classNameVm) : that.classNameVm != null) { return false; }
-        return codeTemplate != null ? codeTemplate.equals(that.codeTemplate)
-                : that.codeTemplate == null;
-    }
-
-    /**
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (classNameVm != null ? classNameVm.hashCode() : 0);
-        result = 31 * result + (codeTemplate != null ? codeTemplate.hashCode() : 0);
-        result = 31 * result + classNumber;
-        return result;
-    }
-
-    public static final CodeTemplate EMPTY_TEMPLATE = new CodeTemplate("", "", "", 1);
+    public static final CodeTemplate EMPTY_TEMPLATE = new CodeTemplate("", "", "", 1, DEFAULT_ENCODING);
 
 }

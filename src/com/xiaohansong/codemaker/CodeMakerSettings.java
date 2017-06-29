@@ -34,11 +34,11 @@ public class CodeMakerSettings implements PersistentStateComponent<CodeMakerSett
             Map<String, CodeTemplate> codeTemplates = new HashMap<>();
             codeTemplates.put("Model",
                     createCodeTemplate("Model.vm",
-                            "#set($end = ${class0.className.length()} - 2)${class0.className.substring(0,${end})}", 1));
+                            "#set($end = ${class0.className.length()} - 2)${class0.className.substring(0,${end})}", 1, CodeTemplate.DEFAULT_ENCODING));
             codeTemplates.put("Converter",
-                    createCodeTemplate("Converter.vm", "${class0.className}Converter", 2));
+                    createCodeTemplate("Converter.vm", "${class0.className}Converter", 2, CodeTemplate.DEFAULT_ENCODING));
             codeTemplates.put("Specs2 Matcher",
-                    createCodeTemplate("specs2-matcher.vm", "${class0.className}Matchers", 1));
+                    createCodeTemplate("specs2-matcher.vm", "${class0.className}Matchers", 1, CodeTemplate.DEFAULT_ENCODING));
             this.codeTemplates = codeTemplates;
         } catch (Exception e) {
             LOGGER.error("loadDefaultSettings failed", e);
@@ -46,10 +46,10 @@ public class CodeMakerSettings implements PersistentStateComponent<CodeMakerSett
     }
 
     @NotNull
-    private CodeTemplate createCodeTemplate(String sourceTemplateName, String classNameVm, int classNumber) throws IOException {
+    private CodeTemplate createCodeTemplate(String sourceTemplateName, String classNameVm, int classNumber, String fileEncoding) throws IOException {
         String velocityTemplate = FileUtil.loadTextAndClose(CodeMakerSettings.class.getResourceAsStream("/template/" + sourceTemplateName));
         return new CodeTemplate(sourceTemplateName,
-                classNameVm, velocityTemplate, classNumber);
+                classNameVm, velocityTemplate, classNumber, fileEncoding);
     }
 
     /**

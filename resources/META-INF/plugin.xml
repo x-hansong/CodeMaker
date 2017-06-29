@@ -19,9 +19,17 @@
     ]]></description>
 
     <change-notes><![CDATA[
-      version 1.0<br>
-      version 1.1 add action "Generate @see doc for override method"<br>
-      version 1.2 Added Scala support, support selecting destination source root for the generated class. Thanks to @dkarlinsky<br>
+    <ul>
+      <li>version 1.0</li>
+      <li>version 1.1<br>
+        add action "Generate @see doc for override method"<br>
+      </li>
+      <li>version 1.2<br>
+        Added Scala support. Thanks to @dkarlinsky<br>
+        Support selecting destination source root for the generated class. Thanks to @dkarlinsky<br>
+        Support custom the generate file encoding<br>
+      </li>
+    </ul>
     ]]>
     </change-notes>
 

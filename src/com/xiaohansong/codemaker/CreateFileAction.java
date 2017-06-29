@@ -6,13 +6,15 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.xiaohansong.codemaker.util.CodeMakerUtil;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.nio.charset.UnsupportedCharsetException;
 
 /**
  * @author hansong.xhs
@@ -29,11 +31,14 @@ public class CreateFileAction implements Runnable {
 
     private String content;
 
+    private String fileEncoding;
+
     private DataContext dataContext;
 
-    public CreateFileAction(String outputFile, String content, DataContext dataContext) {
+    public CreateFileAction(String outputFile, String content, String fileEncoding, DataContext dataContext) {
         this.outputFile = outputFile;
         this.content = content;
+        this.fileEncoding = fileEncoding;
         this.dataContext = dataContext;
     }
 
@@ -42,24 +47,13 @@ public class CreateFileAction implements Runnable {
         try {
             VirtualFileManager manager = VirtualFileManager.getInstance();
             VirtualFile virtualFile = manager
-                .refreshAndFindFileByUrl(VfsUtil.pathToUrl(outputFile));
+                    .refreshAndFindFileByUrl(VfsUtil.pathToUrl(outputFile));
 
             if (virtualFile != null && virtualFile.exists()) {
-                virtualFile.setBinaryContent(content.getBytes());
+                virtualFile.setBinaryContent(content.getBytes(fileEncoding));
             } else {
                 File file = new File(outputFile);
-                if (!file.getParentFile().exists()) {
-                    file.getParentFile().mkdirs();
-                }
-                FileWriter fileWriter = null;
-                try {
-                    fileWriter = new FileWriter(file);
-                    fileWriter.write(content);
-                } finally {
-                    if (fileWriter != null) {
-                        fileWriter.close();
-                    }
-                }
+                FileUtils.writeStringToFile(file, content, fileEncoding);
                 virtualFile = manager.refreshAndFindFileByUrl(VfsUtil.pathToUrl(outputFile));
             }
             VirtualFile finalVirtualFile = virtualFile;
@@ -69,10 +63,12 @@ public class CreateFileAction implements Runnable {
                 return;
             }
             ApplicationManager.getApplication()
-                .invokeLater(
-                    () -> FileEditorManager.getInstance(project).openFile(finalVirtualFile, true,
-                        true));
+                    .invokeLater(
+                            () -> FileEditorManager.getInstance(project).openFile(finalVirtualFile, true,
+                                    true));
 
+        } catch (UnsupportedCharsetException ex) {
+            ApplicationManager.getApplication().invokeLater(() -> Messages.showMessageDialog("Unknown Charset: " + fileEncoding + ", please use the correct charset", "Generate Failed", null));
         } catch (Exception e) {
             LOGGER.error("Create file failed", e);
         }

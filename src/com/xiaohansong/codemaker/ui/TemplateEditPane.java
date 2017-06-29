@@ -5,6 +5,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.xiaohansong.codemaker.CodeMakerSettings;
 import com.xiaohansong.codemaker.CodeTemplate;
@@ -25,6 +26,7 @@ public class TemplateEditPane {
     private JTextField classNameText;
     private JButton    deleteTemplateButton;
     private JPanel     editorPane;
+    private JTextField fileEncodingText;
     private Editor     editor;
 
     public TemplateEditPane(CodeMakerSettings settings, String template,
@@ -37,6 +39,7 @@ public class TemplateEditPane {
         templateNameText.setText(codeTemplate.getName());
         classNumberText.setText(String.valueOf(codeTemplate.getClassNumber()));
         classNameText.setText(codeTemplate.getClassNameVm());
+        fileEncodingText.setText(StringUtil.notNullize(codeTemplate.getFileEncoding(), CodeTemplate.DEFAULT_ENCODING));
         addVmEditor(codeTemplate.getCodeTemplate());
         deleteTemplateButton.addActionListener(e -> {
             int result = Messages.showYesNoDialog("Delete this template?", "Delete", null);
@@ -79,6 +82,10 @@ public class TemplateEditPane {
         return editor.getDocument().getText();
     }
 
+    public String getFileEncoding() {
+        return fileEncodingText.getText();
+    }
+
     /**
      *
      * @return -1 if classNumberText is not number
@@ -89,4 +96,5 @@ public class TemplateEditPane {
         }
         return -1;
     }
+
 }
