@@ -1,7 +1,7 @@
 # CodeMaker
 A idea-plugin for Java/Scala to generate code, support custom code template.
 
-![demonstration](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker.gif)
+![demonstration](https://blog.xiaohansong.com/media/15473672636863/15473884273212.gif)
 
 This plugin generates code from right click 'Generate...' menu while focused on a Java/Scala class. The output class can be customized using a provided velocity template to format the code based on the origin class and optional selected classes.</p>
 
@@ -27,18 +27,18 @@ To install a plugin from the disk in idea
 
 # Usage
 This plugin generates code from right click 'Generate...' menu while focused on a Java/Scala class. 
-![Generate](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker0.png)
+![Generate](https://blog.xiaohansong.com/media/15473672636863/15473884589294.png)
 
 The plugin support multiple class to generate one code, you can set the class number of template to select multiple classes to use.
 
-![select class](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker1.png)
+![select class](https://blog.xiaohansong.com/media/15473672636863/15473884679965.png)
 
 # Configuration
-![configure](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker3.png)
+![configure](https://blog.xiaohansong.com/media/15473672636863/15473884761333.png)
 - **Add template**: click "Add Template" button to add a template, after saving changes.
 - **Delete template**: click "Delete Template" button to delete a template.
 
-![property](http://7xjtfr.com1.z0.glb.clouddn.com/codemaker2.png)
+![property](https://blog.xiaohansong.com/media/15473672636863/15473884844568.png)
 - **classNumber**: The template context will contain the class which user select when trigger the generate action. for example, the number is 1, the template context only has the focused class: $class0; if the number is 2, when you trigger the generate action, you need select a class, then the template context will have two class entry: $class0, $class1
 - **className**: The class name support velocity and the template context.
 
