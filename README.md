@@ -12,6 +12,7 @@ The following features are available:
 - Support add custom template to generate more code.
 - Generate `@see` doc for override method.
 - Support Scala.
+- Generate api table from code 
 
 # Install
 1. Search 'CodeMaker' in Idea plugins

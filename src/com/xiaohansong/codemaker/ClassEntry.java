@@ -77,6 +77,11 @@ public class ClassEntry {
          */
         private String modifier;
 
+        /**
+         * field doc comment
+         */
+        private String comment;
+
     }
 
     private ClassEntry() {

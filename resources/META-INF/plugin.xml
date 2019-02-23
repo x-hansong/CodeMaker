@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.xiaohansong.codemaker</id>
     <name>CodeMaker</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <vendor email="hansong.xhs@gmail.com" url="https://github.com/x-hansong/CodeMaker">Personal</vendor>
 
     <description><![CDATA[
@@ -14,6 +14,8 @@
       <li>Generate the converter class for the model class and the persistent class.</li>
       <li>Support add custom template to generate more code.</li>
       <li>Generate @see doc for override method</li>
+      <li>Generate Api table to clipboard (html or markdown format)</li>
+      <li>Generate the class field from api table in clipboard</li>
     </ul>
     <p>If you want to add variables into template context, you can modified the source and package the plugin to meet your needs. See <a href="https://github.com/x-hansong/CodeMaker/blob/master/README.md#advance">README</a></p>
     ]]></description>
@@ -28,6 +30,10 @@
         Added Scala support. Thanks to @dkarlinsky<br>
         Support selecting destination source root for the generated class. Thanks to @dkarlinsky<br>
         Support custom the generate file encoding<br>
+      </li>
+        <li>version 1.3<br>
+        Support generate api table for the class fields and paste it to the clipboard (html or markdown format)
+        Support generate the class fields from the api table in clipboard
       </li>
     </ul>
     ]]>
@@ -54,13 +60,29 @@
 
     <actions>
         <!-- Add your actions here -->
-        <group id="com.xiaohansong.codemaker.action.CodeMakerMenu" class="com.xiaohansong.codemaker.action.CodeMakerGroup" text="CodeMaker"
+        <group id="com.xiaohansong.codemaker.action.CodeMakerMenu"
+               class="com.xiaohansong.codemaker.action.CodeMakerGroup" text="CodeMaker"
                description="" popup="true">
             <add-to-group group-id="GenerateGroup" anchor="after" relative-to-action="JavaGenerateGroup2"/>
         </group>
-        <action class="com.xiaohansong.codemaker.action.DocGenerateAction" id="com.xiaohansong.codemaker.action.DocGenerateAction"
+        <action class="com.xiaohansong.codemaker.action.DocGenerateAction"
+                id="com.xiaohansong.codemaker.action.DocGenerateAction"
                 text="Generate JavaDoc for override method">
-            <keyboard-shortcut first-keystroke="shift ctrl s" keymap="$default"/>
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
+        <action class="com.xiaohansong.codemaker.action.GenerateApiTableHtmlAction"
+                id="com.xiaohansong.codemaker.action.GenerateApiTableHtmlAction"
+                text="Generate Api html table to clipboard">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
+        <action class="com.xiaohansong.codemaker.action.GenerateApiTableMarkdownAction"
+                id="com.xiaohansong.codemaker.action.GenerateApiTableMarkdownAction"
+                text="Generate Api markdown table to clipboard">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
+        <action class="com.xiaohansong.codemaker.action.GenerateCodeFromApiTableAction"
+                id="com.xiaohansong.codemaker.action.GenerateCodeFromApiTableAction"
+                text="Generate code from Api Table">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>
     </actions>

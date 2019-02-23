@@ -6,7 +6,7 @@ buildscript {
 }
 
 plugins {
-    id "org.jetbrains.intellij" version "0.2.10"
+    id "org.jetbrains.intellij" version "0.2.18"
 }
 
 repositories {
@@ -41,5 +41,5 @@ intellij {
 }
 
 group 'com.xiaohansong'
-version '1.2'
+version '1.3'
 

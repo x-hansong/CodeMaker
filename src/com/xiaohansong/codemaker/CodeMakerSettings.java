@@ -39,6 +39,9 @@ public class CodeMakerSettings implements PersistentStateComponent<CodeMakerSett
                     createCodeTemplate("Converter.vm", "${class0.className}Converter", 2, CodeTemplate.DEFAULT_ENCODING));
             codeTemplates.put("Specs2 Matcher",
                     createCodeTemplate("specs2-matcher.vm", "${class0.className}Matchers", 1, CodeTemplate.DEFAULT_ENCODING));
+            codeTemplates.put("FieldComment",
+                    createCodeTemplate("FieldComment.vm", "${class0.className}", 1, CodeTemplate.DEFAULT_ENCODING));
+
             this.codeTemplates = codeTemplates;
         } catch (Exception e) {
             LOGGER.error("loadDefaultSettings failed", e);
