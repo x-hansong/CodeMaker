@@ -1,39 +1,29 @@
 package com.xiaohansong.codemaker.util;
 
-import static scala.collection.JavaConversions.seqAsJavaList;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.plugins.scala.lang.psi.api.ScalaFile;
-import org.jetbrains.plugins.scala.lang.psi.api.statements.params.ScClassParameter;
-import org.jetbrains.plugins.scala.lang.psi.api.toplevel.imports.ScImportStmt;
-import org.jetbrains.plugins.scala.lang.psi.api.toplevel.typedef.ScClass;
-
 import com.google.common.collect.Lists;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiImportList;
-import com.intellij.psi.PsiImportStatement;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiNamedElement;
+import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.xiaohansong.codemaker.ClassEntry;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.plugins.scala.lang.psi.api.ScalaFile;
+import org.jetbrains.plugins.scala.lang.psi.api.statements.params.ScClassParameter;
+import org.jetbrains.plugins.scala.lang.psi.api.toplevel.imports.ScImportStmt;
+import org.jetbrains.plugins.scala.lang.psi.api.toplevel.typedef.ScClass;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static scala.collection.JavaConversions.seqAsJavaList;
 
 /**
  * @author hansong.xhs
@@ -84,9 +74,9 @@ public class CodeMakerUtil {
     }
 
     public static List<String> getScalaImportList(ScalaFile scalaFile) {
-        List<ScImportStmt> scImportStmts = seqAsJavaList(scalaFile.importStatementsInHeader());
+        List<ScImportStmt> scImportStmts = seqAsJavaList(scalaFile.getImportStatements());
         return scImportStmts.stream()
-            .flatMap(stmt -> seqAsJavaList(stmt.importExprs()).stream().map(expr -> expr.getText()))
+            .flatMap(stmt -> seqAsJavaList(stmt.importExprs()).stream().map(PsiElement::getText))
             .collect(Collectors.toList());
     }
 
@@ -99,7 +89,7 @@ public class CodeMakerUtil {
             .collect(Collectors.toList());
     }
 
-    public static String getDocCommentText(PsiField psiField) {
+    private static String getDocCommentText(PsiField psiField) {
         if (psiField.getDocComment() == null) {
             return "";
         }
@@ -195,7 +185,7 @@ public class CodeMakerUtil {
             .collect(Collectors.toList());
     }
 
-    public static List<Character> markdownChars = Lists.newArrayList('<', '>', '`', '*', '_', '{',
+    private static List<Character> markdownChars = Lists.newArrayList('<', '>', '`', '*', '_', '{',
         '}', '[', ']', '(', ')', '#', '+', '-', '.', '!');
 
     public static String escapeMarkdown(String str) {
@@ -209,7 +199,7 @@ public class CodeMakerUtil {
         return result.toString();
     }
 
-    public static int findJavaDocTextOffset(PsiElement theElement) {
+    private static int findJavaDocTextOffset(PsiElement theElement) {
         PsiElement javadocElement = theElement.getFirstChild();
         if (!(javadocElement instanceof PsiDocComment)) {
             throw new IllegalStateException("Cannot find element of type PsiDocComment");
@@ -217,7 +207,7 @@ public class CodeMakerUtil {
         return javadocElement.getTextOffset();
     }
 
-    public static int findJavaCodeTextOffset(PsiElement theElement) {
+    private static int findJavaCodeTextOffset(PsiElement theElement) {
         if (theElement.getChildren().length < 2) {
             throw new IllegalStateException("Can not find offset of java code");
         }
@@ -226,7 +216,6 @@ public class CodeMakerUtil {
 
     /**
      * save the current change
-     * @param element
      */
     public static void pushPostponedChanges(PsiElement element) {
         Editor editor = PsiUtilBase.findEditor(element.getContainingFile());

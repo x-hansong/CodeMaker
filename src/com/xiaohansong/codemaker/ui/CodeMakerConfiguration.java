@@ -7,6 +7,7 @@ import com.xiaohansong.codemaker.CodeTemplate;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -55,7 +56,7 @@ public class CodeMakerConfiguration {
     }
 
     public Map<String, CodeTemplate> getTabTemplates() {
-        Map<String, CodeTemplate> map = new HashMap<>();
+        Map<String, CodeTemplate> map = new LinkedHashMap<>();
         editPaneMap.forEach((key, value) -> {
             CodeTemplate codeTemplate = new CodeTemplate(value.getTemplateName(), value
                     .getClassName(), value.getTemplate(), value.getClassNumber(), value.getFileEncoding());
