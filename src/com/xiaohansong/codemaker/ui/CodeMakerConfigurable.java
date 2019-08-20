@@ -1,6 +1,7 @@
 package com.xiaohansong.codemaker.ui;
 
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.xiaohansong.codemaker.CodeMakerSettings;
@@ -16,7 +17,7 @@ import java.util.Map;
  * @author hansong.xhs
  * @version $Id: CodeMakerConfigurable.java, v 0.1 2017-01-31 9:09 hansong.xhs Exp $$
  */
-public class CodeMakerConfigurable implements SearchableConfigurable {
+public class CodeMakerConfigurable implements SearchableConfigurable, Configurable.NoScroll {
 
     private CodeMakerSettings      settings;
 
@@ -87,13 +88,13 @@ public class CodeMakerConfigurable implements SearchableConfigurable {
             }
         }
         settings.setCodeTemplates(configuration.getTabTemplates());
-        configuration.refresh(settings);
+        configuration.refresh(settings.getCodeTemplates());
     }
 
     @Override
     public void reset() {
         if (configuration != null) {
-            configuration.refresh(settings);
+            configuration.refresh(settings.getCodeTemplates());
         }
     }
 

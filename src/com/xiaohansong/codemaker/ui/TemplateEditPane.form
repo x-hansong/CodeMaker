@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.xiaohansong.codemaker.ui.TemplateEditPane">
-  <grid id="27dc6" binding="templateEdit" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-    <margin top="6" left="6" bottom="6" right="6"/>
+  <grid id="27dc6" binding="templateEdit" layout-manager="BorderLayout" hgap="2" vgap="2">
     <constraints>
-      <xy x="20" y="36" width="500" height="384"/>
+      <xy x="19" y="36" width="679" height="642"/>
     </constraints>
     <properties>
       <opaque value="true"/>
@@ -11,14 +10,14 @@
     <border type="none"/>
     <children>
       <grid id="ce361" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="0" left="10" bottom="0" right="10"/>
-        <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
+        <margin top="2" left="2" bottom="2" right="2"/>
+        <constraints border-constraint="North"/>
         <properties>
           <enabled value="true"/>
         </properties>
-        <border type="none"/>
+        <border type="line">
+          <color color="-1250068"/>
+        </border>
         <children>
           <component id="612c0" class="javax.swing.JTextField" binding="templateNameText">
             <constraints>
@@ -30,10 +29,12 @@
           </component>
           <component id="a776e" class="javax.swing.JLabel">
             <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="141" height="16"/>
+              </grid>
             </constraints>
             <properties>
-              <text value="Class Number"/>
+              <text value="Class Count"/>
             </properties>
           </component>
           <component id="da727" class="javax.swing.JTextField" binding="classNumberText">
@@ -48,7 +49,9 @@
           </component>
           <component id="8e229" class="javax.swing.JLabel">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="141" height="16"/>
+              </grid>
             </constraints>
             <properties>
               <text value="Template Name"/>
@@ -56,7 +59,9 @@
           </component>
           <component id="4e784" class="javax.swing.JLabel">
             <constraints>
-              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="141" height="16"/>
+              </grid>
             </constraints>
             <properties>
               <text value="Class Name"/>
@@ -72,40 +77,152 @@
               <toolTipText value="Support velocity, with context={class0}"/>
             </properties>
           </component>
-          <component id="f1911" class="javax.swing.JButton" binding="deleteTemplateButton" default-binding="true">
-            <constraints>
-              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Delete Template"/>
-            </properties>
-          </component>
           <component id="1e47e" class="javax.swing.JLabel">
             <constraints>
-              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="141" height="16"/>
+              </grid>
             </constraints>
             <properties>
               <text value="File Encodings"/>
             </properties>
           </component>
+          <component id="12984" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="141" height="16"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text value="Template Language"/>
+            </properties>
+          </component>
           <component id="de81e" class="javax.swing.JTextField" binding="fileEncodingText">
             <constraints>
               <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
+                <preferred-size width="376" height="27"/>
               </grid>
             </constraints>
             <properties/>
           </component>
+          <grid id="6a7b5" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="352cf" class="javax.swing.JComboBox" binding="templateLanguage">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <model>
+                    <item value="vm"/>
+                    <item value="groovy"/>
+                  </model>
+                </properties>
+              </component>
+              <hspacer id="10304">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
+              <component id="be02b" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Target Language"/>
+                </properties>
+              </component>
+              <component id="7db9c" class="javax.swing.JComboBox" binding="targetLanguage">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+              </component>
+            </children>
+          </grid>
         </children>
       </grid>
-      <grid id="ae69c" binding="editorPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="0" left="0" bottom="0" right="0"/>
-        <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-        </constraints>
+      <grid id="e0b44" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="Center"/>
         <properties/>
         <border type="none"/>
-        <children/>
+        <children>
+          <grid id="b52c" layout-manager="FlowLayout" hgap="2" vgap="2" flow-align="0">
+            <constraints border-constraint="North"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="ce7aa" class="javax.swing.JLabel">
+                <constraints/>
+                <properties>
+                  <text value="Test using"/>
+                </properties>
+              </component>
+              <hspacer id="738b7">
+                <constraints/>
+              </hspacer>
+              <component id="335a0" class="javax.swing.JComboBox" binding="testInputs">
+                <constraints/>
+                <properties/>
+              </component>
+              <component id="e6131" class="javax.swing.JButton" binding="testButton">
+                <constraints/>
+                <properties>
+                  <iconTextGap value="0"/>
+                  <maximumSize width="27" height="27"/>
+                  <minimumSize width="27" height="27"/>
+                  <opaque value="false"/>
+                  <preferredSize width="27" height="27"/>
+                  <text value=""/>
+                  <toolTipText value="Test Template"/>
+                  <verticalAlignment value="0"/>
+                </properties>
+              </component>
+              <component id="2cee0" class="javax.swing.JButton" binding="showTestInput">
+                <constraints/>
+                <properties>
+                  <maximumSize width="27" height="27"/>
+                  <minimumSize width="27" height="27"/>
+                  <preferredSize width="27" height="27"/>
+                  <text value=""/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <splitpane id="2200" binding="editorSplitPane">
+            <constraints border-constraint="Center"/>
+            <properties>
+              <dividerSize value="3"/>
+              <enabled value="false"/>
+              <oneTouchExpandable value="false"/>
+              <orientation value="0"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <grid id="7f775" binding="editorHolder" layout-manager="BorderLayout" hgap="0" vgap="0">
+                <constraints>
+                  <splitpane position="right"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children/>
+              </grid>
+              <grid id="37bbe" binding="testInputHolder" layout-manager="BorderLayout" hgap="0" vgap="0">
+                <constraints>
+                  <splitpane position="left"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children/>
+              </grid>
+            </children>
+          </splitpane>
+        </children>
       </grid>
     </children>
   </grid>

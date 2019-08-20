@@ -41,11 +41,37 @@ public class CodeTemplate {
      */
     private String fileEncoding;
 
+
+    private TemplateLanguage templateLanguage;
+
+    private String targetLanguage;
+
+    public TemplateLanguage getTemplateLanguage() {
+        return templateLanguage == null? TemplateLanguage.vm : templateLanguage;
+    }
+
+    public void setTemplateLanguage(TemplateLanguage templateLanguage) {
+        if(templateLanguage == null) {
+            templateLanguage = TemplateLanguage.vm;
+        }
+        this.templateLanguage = templateLanguage;
+    }
+
     public boolean isValid() {
         return StringUtil.isNotEmpty(getClassNameVm()) && StringUtil.isNotEmpty(getName())
                 && StringUtil.isNotEmpty(getCodeTemplate()) && classNumber != -1 && StringUtil.isNotEmpty(getFileEncoding());
     }
 
-    public static final CodeTemplate EMPTY_TEMPLATE = new CodeTemplate("", "", "", 1, DEFAULT_ENCODING);
+    public static CodeTemplate empty(String title) {
+       return new CodeTemplate(title, "", "", 1, DEFAULT_ENCODING, TemplateLanguage.vm, "java");
+    }
 
+    public String getTargetLanguage() {
+        if(targetLanguage == null) return "java";
+        else return targetLanguage;
+    }
+
+    public void setTargetLanguage(String targetLanguage) {
+        this.targetLanguage = targetLanguage == null ? "java" : targetLanguage;
+    }
 }

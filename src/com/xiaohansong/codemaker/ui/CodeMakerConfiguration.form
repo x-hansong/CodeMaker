@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.xiaohansong.codemaker.ui.CodeMakerConfiguration">
-  <grid id="27dc6" binding="mainPane" layout-manager="GridBagLayout">
+  <grid id="27dc6" binding="mainPane" layout-manager="FormLayout">
+    <rowspec value="fill:d:grow"/>
+    <colspec value="fill:618px:grow"/>
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
+      <xy x="20" y="20" width="636" height="400"/>
     </constraints>
     <properties>
       <opaque value="true"/>
     </properties>
     <border type="none"/>
     <children>
-      <component id="a0287" class="javax.swing.JButton" binding="addTemplateButton" default-binding="true">
+      <tabbedpane id="d7cae" class="com.intellij.ui.components.JBTabbedPane" binding="tabbedPane">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="0.0" weighty="0.0"/>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
-          <text value="Add Template"/>
+          <tabComponentInsets top="0" left="0" bottom="0" right="0"/>
+          <tabLayoutPolicy value="1"/>
         </properties>
-      </component>
+        <border type="none"/>
+        <children/>
+      </tabbedpane>
     </children>
   </grid>
 </form>

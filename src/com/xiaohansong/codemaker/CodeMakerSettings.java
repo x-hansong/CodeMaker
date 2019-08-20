@@ -35,15 +35,15 @@ public class CodeMakerSettings implements PersistentStateComponent<CodeMakerSett
             codeTemplates.put("Model",
                     createCodeTemplate("Model",
                             "Model.vm",
-                            "#set($end = ${class0.className.length()} - 2)${class0.className.substring(0,${end})}", 1, CodeTemplate.DEFAULT_ENCODING));
+                            "#set($end = ${class0.className.length()} - 2)${class0.className.substring(0,${end})}", 1, "java"));
             codeTemplates.put("Converter",
-                    createCodeTemplate("Converter", "Converter.vm", "${class0.className}Converter", 2, CodeTemplate.DEFAULT_ENCODING));
+                    createCodeTemplate("Converter", "Converter.vm", "${class0.className}Converter", 2, "java"));
             codeTemplates.put("Specs2 Matcher",
-                    createCodeTemplate("Specs2 Matcher", "specs2-matcher.vm", "${class0.className}Matchers", 1, CodeTemplate.DEFAULT_ENCODING));
+                    createCodeTemplate("Specs2 Matcher", "specs2-matcher.vm", "${class0.className}Matchers", 1, "scala"));
             codeTemplates.put("Specs2 Fluent Matcher",
-                    createCodeTemplate("Specs2 Fluent Matcher", "specs2-fluent-matcher.vm", "${class0.className}Matchers", 1, CodeTemplate.DEFAULT_ENCODING));
+                    createCodeTemplate("Specs2 Fluent Matcher", "specs2-fluent-matcher.vm", "${class0.className}Matchers", 1, "scala"));
             codeTemplates.put("FieldComment",
-                    createCodeTemplate("FieldComment", "FieldComment.vm", "${class0.className}", 1, CodeTemplate.DEFAULT_ENCODING));
+                    createCodeTemplate("FieldComment", "FieldComment.vm", "${class0.className}", 1, "java"));
 
             this.codeTemplates = codeTemplates;
         } catch (Exception e) {
@@ -52,9 +52,9 @@ public class CodeMakerSettings implements PersistentStateComponent<CodeMakerSett
     }
 
     @NotNull
-    private CodeTemplate createCodeTemplate(String name, String sourceTemplateName, String classNameVm, int classNumber, String fileEncoding) throws IOException {
+    private CodeTemplate createCodeTemplate(String name, String sourceTemplateName, String classNameVm, int classNumber, String targetLanguage) throws IOException {
         String velocityTemplate = FileUtil.loadTextAndClose(CodeMakerSettings.class.getResourceAsStream("/template/" + sourceTemplateName));
-        return new CodeTemplate(name, classNameVm, velocityTemplate, classNumber, fileEncoding);
+        return new CodeTemplate(name, classNameVm, velocityTemplate, classNumber, CodeTemplate.DEFAULT_ENCODING, TemplateLanguage.vm, targetLanguage);
     }
 
     /**
@@ -66,7 +66,7 @@ public class CodeMakerSettings implements PersistentStateComponent<CodeMakerSett
         if (codeTemplates == null) {
             loadDefaultSettings();
         }
-        return codeTemplates;
+        return new LinkedHashMap<>(codeTemplates);
     }
 
     @Setter
@@ -94,4 +94,7 @@ public class CodeMakerSettings implements PersistentStateComponent<CodeMakerSett
         codeTemplates.remove(template);
     }
 
+    public void addTemplate(String key, CodeTemplate template) {
+        codeTemplates.put(key, template);
+    }
 }

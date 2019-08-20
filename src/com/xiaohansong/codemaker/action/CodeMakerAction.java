@@ -7,8 +7,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
@@ -22,23 +20,20 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.refactoring.PackageWrapper;
-import com.intellij.uiDesigner.core.GridConstraints;
 import com.xiaohansong.codemaker.ClassEntry;
 import com.xiaohansong.codemaker.CodeMakerSettings;
 import com.xiaohansong.codemaker.CodeTemplate;
 import com.xiaohansong.codemaker.CreateFileAction;
+import com.xiaohansong.codemaker.templates.GeneratedSource;
+import com.xiaohansong.codemaker.templates.PolyglotTemplateEngine;
+import com.xiaohansong.codemaker.templates.TemplateEngine;
+import com.xiaohansong.codemaker.ui.Editors;
 import com.xiaohansong.codemaker.util.CodeMakerUtil;
-import com.xiaohansong.codemaker.util.VelocityUtil;
-import lombok.Data;
-import lombok.Getter;
-import org.apache.commons.lang.time.DateFormatUtils;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author hansong.xhs
@@ -51,6 +46,8 @@ public class CodeMakerAction extends AnAction implements DumbAware {
     private CodeMakerSettings settings;
 
     private String templateKey;
+
+    private TemplateEngine templateEngine = new PolyglotTemplateEngine();
 
     CodeMakerAction(String templateKey) {
         this.settings = ServiceManager.getService(CodeMakerSettings.class);
@@ -99,8 +96,7 @@ public class CodeMakerAction extends AnAction implements DumbAware {
                 saveToFile(anActionEvent, language, generated.className, generated.content, currentClass, (DestinationChooser.FileDestination) destination, codeTemplate.getFileEncoding());
             }
             else if(destination == DestinationChooser.ShowSourceDestination) {
-
-                showSource(project, language, generated.className, generated.content);
+                showSource(project, codeTemplate.getTargetLanguage(), generated.className, generated.content);
             }
 
         } catch (Exception e) {
@@ -110,23 +106,7 @@ public class CodeMakerAction extends AnAction implements DumbAware {
 
     @NotNull
     private GeneratedSource generateSource(CodeTemplate codeTemplate, List<ClassEntry> selectClasses, ClassEntry currentClass) {
-        Map<String, Object> map = new HashMap<>();
-        for (int i = 0; i < selectClasses.size(); i++) {
-            map.put("class" + i, selectClasses.get(i));
-        }
-        Date now = new Date();
-        map.put("class", currentClass);
-        map.put("YEAR", DateFormatUtils.format(now, "yyyy"));
-        map.put("TIME", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-        map.put("USER", System.getProperty("user.name"));
-        map.put("utils", new Utils());
-        map.put("BR", "\n");
-        String className = VelocityUtil.evaluate(codeTemplate.getClassNameVm(), map);
-        map.put("ClassName", className);
-
-        String content = VelocityUtil.evaluate(codeTemplate.getCodeTemplate(), map);
-
-        return new GeneratedSource(className, content);
+        return templateEngine.evaluate(codeTemplate, selectClasses, currentClass);
     }
 
     private void saveToFile(AnActionEvent anActionEvent, String language, String className, String content, ClassEntry currentClass, DestinationChooser.FileDestination destination, String encoding) {
@@ -147,22 +127,11 @@ public class CodeMakerAction extends AnAction implements DumbAware {
     }
 
     private void showSource(Project project, String language, String className, String content) {
-        final EditorFactory factory = EditorFactory.getInstance();
-        final Editor editor = factory.createEditor(factory.createDocument(content), project, FileTypeManager.getInstance()
-                .getFileTypeByExtension(language), true);
-
-        final JPanel panel = new JPanel();
-        GridConstraints constraints = new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST,
-                GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW,
-                GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, 300), null, 0, true);
-
-        panel.add(editor.getComponent(), constraints);
-
+        final Editor editor = Editors.createSourceEditor(project, language, content, true);
         final DialogBuilder builder = new DialogBuilder(project);
         builder.addCloseButton().setText("Close");
-        builder.setCenterPanel(panel);
+        builder.setCenterPanel(editor.getComponent());
         builder.setTitle(className);
-
         builder.show();
     }
 
@@ -196,50 +165,4 @@ public class CodeMakerAction extends AnAction implements DumbAware {
         }
         return selectClasses;
     }
-
-    public static class Utils {
-        public String mkString(Collection<?> list, String delimiter, String prefix, String suffix) {
-            if (list.isEmpty())
-                return "";
-            else
-                return list.stream()
-                        .map(Object::toString)
-                        .collect(Collectors.joining(delimiter, prefix, suffix));
-        }
-
-        public String delim(Collection<?> list, int velocityCount, String delim) {
-            if (velocityCount < list.size())
-                return delim;
-            else
-                return "";
-        }
-
-        public String camelCase(String prefix, String name){
-            if(name == null || name.isEmpty())
-                return name;
-            String identifier = scala.removeBackticks(name);
-            return scala.removeBackticks(prefix) + identifier.substring(0, 1).toUpperCase() + identifier.substring(1);
-        }
-
-        @Getter
-        private final ScalaUtils scala = new ScalaUtils();
-
-        public static class ScalaUtils {
-            /**
-             * backticks are sometimes used in scala identifiers to escape reserved words like `type`, `object`, etc.
-             */
-            public String removeBackticks(String str) {
-                if(str == null) return str;
-                else return str.replace("`", "");
-            }
-        }
-    }
-
-
-    @Data
-    private static class GeneratedSource {
-       private final String className;
-       private final String content;
-    }
-
 }
