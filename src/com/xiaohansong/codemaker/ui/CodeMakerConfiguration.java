@@ -37,7 +37,7 @@ public class CodeMakerConfiguration {
     protected void createNewTemplate() {
         final String key = UUID.randomUUID().toString();
         final CodeTemplate template = CodeTemplate.empty("Untitled");
-        final int index = addNewTab(key, template);
+        final int index = addNewTab(key, template, 1);
         codeTemplates.put(key, template);
         // select the last template tab - that is not the plus button
         selectTab(index);
@@ -75,7 +75,11 @@ public class CodeMakerConfiguration {
     }
 
     private int addNewTab(String key, CodeTemplate codeTemplate) {
-        final int index = tabbedPane.getTabCount() ;
+        return addNewTab(key, codeTemplate, 0);
+    }
+
+    private int addNewTab(String key, CodeTemplate codeTemplate, int indexFromEnd) {
+        final int index = tabbedPane.getTabCount() - indexFromEnd ;
         TemplateEditPane editPane = new TemplateEditPane(codeTemplate,
                 updated -> tabTitleChanged(index, updated));
         tabbedPane.insertTab(key, null,  editPane.getTemplateEdit(), null, index);
