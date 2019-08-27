@@ -13,4 +13,8 @@ public class Editors {
         editor.getSettings().setRefrainFromScrolling(false);
         return editor;
     }
+
+    public static void release(Editor editor) {
+        EditorFactory.getInstance().releaseEditor(editor);
+    }
 }

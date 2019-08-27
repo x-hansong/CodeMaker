@@ -1,17 +1,10 @@
 package com.xiaohansong.codemaker.ui;
 
-import com.google.common.collect.Streams;
 import com.intellij.icons.AllIcons;
-import com.intellij.lang.Language;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.DocumentAdapter;
-import com.intellij.ui.components.JBTabbedPane;
+import com.intellij.util.ExceptionUtil;
 import com.xiaohansong.codemaker.ClassEntry;
 import com.xiaohansong.codemaker.CodeTemplate;
 import com.xiaohansong.codemaker.TemplateLanguage;
@@ -20,16 +13,11 @@ import com.xiaohansong.codemaker.templates.PolyglotTemplateEngine;
 import com.xiaohansong.codemaker.templates.TemplateEngine;
 import com.xiaohansong.codemaker.templates.input.TestInput;
 import com.xiaohansong.codemaker.templates.input.TestInputs;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
-import java.awt.*;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -47,15 +35,12 @@ public class TemplateEditPane {
     private JTextField fileEncodingText;
     private JComboBox  templateLanguage;
     private JButton    testButton;
-    private JPanel editorHolder;
     private JComboBox<TestInput>  testInputs;
     private JSplitPane editorSplitPane;
-    private JPanel testInputHolder;
-    private Boolean testInputShown = false;
     private JButton showTestInput;
     private JComboBox<TargetLanguage> targetLanguage;
-    private Editor     editor;
     private TemplateEngine templateEngine = new PolyglotTemplateEngine();
+    private TemplateEditAndTest templateEditAndTest;
 
     public TemplateEditPane(CodeTemplate codeTemplate, Consumer<String> titleChanged) {
         if (codeTemplate == null) {
@@ -72,15 +57,15 @@ public class TemplateEditPane {
 
         templateLanguage.setSelectedItem(codeTemplate.getTemplateLanguage().name());
         templateLanguage.addActionListener(e -> {
-           initTemplateEditor(getTemplate(), getTemplateLanguage());
+           templateEditAndTest.refreshTemplateEditor();
         });
         classNumberSpinner.setValue(codeTemplate.getClassNumber());
         classNameText.setText(codeTemplate.getClassNameVm());
         fileEncodingText.setText(StringUtil.notNullize(codeTemplate.getFileEncoding(), CodeTemplate.DEFAULT_ENCODING));
-        initTemplateEditor(codeTemplate.getCodeTemplate(), codeTemplate.getTemplateLanguage());
 
         testButton.setText(null);
         testButton.setIcon(AllIcons.Actions.Execute);
+        testButton.addActionListener(e -> testTemplate());
 
         final ListCellRenderer renderer = testInputs.getRenderer();
         TestInputs.getInputs().forEach(testInputs::addItem);
@@ -88,116 +73,40 @@ public class TemplateEditPane {
         testInputs.setRenderer((l, item, index, selected, focused ) ->
                 renderer.getListCellRendererComponent(l, item.getName(), index, selected, focused));
 
-        testInputs.addItemListener(e -> refreshTestInputPane());
+        testInputs.addItemListener(e -> templateEditAndTest.refreshTestInput());
 
         classNumberSpinner.setModel(new SpinnerNumberModel(codeTemplate.getClassNumber(), 1, 3, 1));
-        classNumberSpinner.addChangeListener(e -> refreshTestInputPane());
+        classNumberSpinner.addChangeListener(e -> templateEditAndTest.refreshTestInput());
 
-        refreshTestInputPane();
+        templateEditAndTest = new TemplateEditAndTest(
+                editorSplitPane,
+                this::getSelectedTestInput,
+                this::getClassNumber,
+                codeTemplate.getCodeTemplate(),
+                this::getTemplateLanguage,
+                150);
 
         setUpShowTestInputButton();
 
-        setTargetLanguagesList(codeTemplate.getTargetLanguage());
+        TargetLanguageSelect.INSTANCE.initCombo(targetLanguage, codeTemplate.getTargetLanguage());
     }
 
     protected void setUpShowTestInputButton() {
-        editorSplitPane.setDividerLocation(0);
-        // when split pane is resized (layout is called) it may move the divider
-        editorSplitPane.addPropertyChangeListener("dividerLocation", e -> {
-            if(!testInputShown && (Integer)e.getNewValue() > 0) {
-                SwingUtilities.invokeLater(() -> editorSplitPane.setDividerLocation(0));
-            }
-        });
         showTestInput.setIcon(AllIcons.General.ArrowDown);
         showTestInput.setToolTipText("Show Test Input");
         showTestInput.addActionListener(e -> {
-            if(!testInputShown) {
-                testInputShown = true;
-                editorSplitPane.setDividerLocation(120);
+            if(!templateEditAndTest.getTestInputShown()) {
+                templateEditAndTest.toggleTestInputPane();
                 showTestInput.setIcon(AllIcons.General.ArrowUp);
                 editorSplitPane.setEnabled(true);
                 showTestInput.setToolTipText("Hide Test Input");
             } else {
-                testInputShown = false;
-                editorSplitPane.setDividerLocation(0);
+                templateEditAndTest.toggleTestInputPane();
                 showTestInput.setIcon(AllIcons.General.ArrowDown);
                 showTestInput.setToolTipText("Show Test Input");
                 editorSplitPane.setEnabled(false);
             }
         });
-    }
-
-    protected void setTargetLanguagesList(String selected) {
-
-        // this sets the width of the combobox
-        targetLanguage.setPrototypeDisplayValue(new TargetLanguage("JavaScript 1.1", ""));
-
-        final TargetLanguage[] popular = {
-                new TargetLanguage("Java", "java"),
-                new TargetLanguage("Scala", "scala"),
-                new TargetLanguage("Kotlin", "kt"),
-                new TargetLanguage("JavaScript", "js"),
-                new TargetLanguage("TypeScript", "ts"),
-                new TargetLanguage("SQL", "sql")
-        };
-
-        final Set<String> popularExts = Stream.of(popular)
-                .map(TargetLanguage::getFileType)
-                .collect(Collectors.toSet());
-
-        final Stream<TargetLanguage> otherRegistered = Language.getRegisteredLanguages().stream()
-                .filter(l -> {
-                    if (l.getAssociatedFileType() != null) {
-                        final String ext = l.getAssociatedFileType().getDefaultExtension();
-                        return !ext.isEmpty() && !popularExts.contains(ext.toLowerCase());
-                    } else return false;
-                })
-                .sorted(Comparator.comparing(Language::getDisplayName))
-                .map(TargetLanguage::new);
-
-        Streams.concat(Stream.of(popular), otherRegistered)
-         .forEach(targetLanguage::addItem);
-
-        targetLanguage.setSelectedItem(selected);
-    }
-
-
-    protected void refreshTestInputPane() {
-        if(testInputHolder.getComponentCount() > 0) {
-            testInputHolder.remove(0);
-        }
-        final int classCount = getClassNumber();
-        if(classCount > 1) {
-            final JTabbedPane tabbedPane = new JBTabbedPane();
-            inputClassIndices().forEach(i -> {
-                final String className = "SomeClass" + i;
-                tabbedPane.addTab(className, newTestInputSourceView(className).getComponent());
-            });
-            testInputHolder.add(tabbedPane);
-        } else {
-            testInputHolder.add(newTestInputSourceView("SomeClass").getComponent());
-        }
-    }
-
-    private Editor newTestInputSourceView(String className) {
-        final TestInput selectedTestInput = getSelectedTestInput();
-        return Editors.createSourceEditor(null,
-                selectedTestInput.getLanguage(),
-                selectedTestInput.getSource(className),
-                true);
-    }
-
-    private void initTemplateEditor(String template, TemplateLanguage lang) {
-        if(editor !=null) {
-            editorHolder.remove(editor.getComponent());
-        }
-        final EditorFactory factory = EditorFactory.getInstance();
-        final Document content = factory.createDocument(template);
-        final FileType fileType = FileTypeManager.getInstance().getFileTypeByExtension(lang.fileType);
-        editor = factory.createEditor(content, null, fileType, false);
-        editor.getSettings().setRefrainFromScrolling(false);
-        editorHolder.add(editor.getComponent(), BorderLayout.CENTER);
-        testButton.addActionListener(e -> testTemplate());
     }
 
     private void testTemplate() {
@@ -228,7 +137,9 @@ public class TemplateEditPane {
             Throwable error = (Throwable) result;
             builder.setTitle("Failed!");
             builder.setCenterPanel(
-                  Editors.createSourceEditor(null, "txt", error.getMessage(), true).getComponent());
+                  Editors.createSourceEditor(null, "txt",
+                          error.getMessage() + "\n\n" + ExceptionUtil.getThrowableText(error), true)
+                          .getComponent());
         }
         builder.show();
     }
@@ -265,7 +176,7 @@ public class TemplateEditPane {
     }
 
     public String getTemplate() {
-        return editor.getDocument().getText();
+        return templateEditAndTest.getTemplateText();
     }
 
     public String getFileEncoding() {
@@ -277,29 +188,8 @@ public class TemplateEditPane {
     }
 
     public String getTargetLanguage() {
-        final Object selectedItem = targetLanguage.getSelectedItem();
+        final TargetLanguage selectedItem = (TargetLanguage)targetLanguage.getSelectedItem();
         if(selectedItem == null) return "java";
-        else return selectedItem.toString();
-    }
-
-    @Data
-    @AllArgsConstructor
-    private static class TargetLanguage {
-        public final String name;
-        public final String fileType;
-
-        public String getFileType() {
-            return fileType;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-
-        TargetLanguage(Language lang) {
-            this.name = lang.getDisplayName();
-            this.fileType = lang.getAssociatedFileType() == null ? "" : lang.getAssociatedFileType().getDefaultExtension();
-        }
+        else return selectedItem.getFileType();
     }
 }

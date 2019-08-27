@@ -71,9 +71,9 @@
             <colspec value="fill:d:grow"/>
             <colspec value="left:7dlu:noGrow"/>
             <colspec value="fill:d:grow"/>
-            <colspec value="left:7dlu:noGrow"/>
+            <colspec value="left:4dlu:noGrow"/>
             <colspec value="fill:d:grow"/>
-            <colspec value="left:8dlu:noGrow"/>
+            <colspec value="left:10dlu:noGrow"/>
             <colspec value="fill:d:grow"/>
             <colspec value="left:4dlu:noGrow"/>
             <colspec value="fill:d:grow"/>
@@ -222,27 +222,36 @@
           <splitpane id="2200" binding="editorSplitPane">
             <constraints border-constraint="Center"/>
             <properties>
-              <dividerSize value="3"/>
+              <dividerSize value="2"/>
               <enabled value="false"/>
               <oneTouchExpandable value="false"/>
               <orientation value="0"/>
             </properties>
             <border type="none"/>
             <children>
-              <grid id="7f775" binding="editorHolder" layout-manager="BorderLayout" hgap="0" vgap="0">
+              <grid id="7f775" layout-manager="BorderLayout" hgap="0" vgap="0">
                 <constraints>
                   <splitpane position="right"/>
                 </constraints>
-                <properties/>
-                <border type="none"/>
+                <properties>
+                  <name value=""/>
+                  <opaque value="false"/>
+                </properties>
+                <border type="none" title="Template" title-justification="1">
+                  <font size="10"/>
+                </border>
                 <children/>
               </grid>
-              <grid id="37bbe" binding="testInputHolder" layout-manager="BorderLayout" hgap="0" vgap="0">
+              <grid id="37bbe" layout-manager="BorderLayout" hgap="0" vgap="0">
                 <constraints>
                   <splitpane position="left"/>
                 </constraints>
-                <properties/>
-                <border type="none"/>
+                <properties>
+                  <name value=""/>
+                </properties>
+                <border type="none" title="Test Input" title-justification="1">
+                  <font size="10"/>
+                </border>
                 <children/>
               </grid>
             </children>

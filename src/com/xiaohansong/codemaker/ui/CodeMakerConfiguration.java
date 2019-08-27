@@ -114,7 +114,8 @@ public class CodeMakerConfiguration {
         Map<String, CodeTemplate> map = new LinkedHashMap<>();
         editPaneMap.forEach((key, value) -> {
             CodeTemplate codeTemplate = new CodeTemplate(value.getTemplateName(), value
-                    .getClassName(), value.getTemplate(), value.getClassNumber(), value.getFileEncoding(), value.getTemplateLanguage(), value.getTargetLanguage());
+                    .getClassName(), value.getTemplate(), value.getClassNumber(), value.getFileEncoding(), value.getTemplateLanguage(),
+                    value.getTargetLanguage());
             map.put(codeTemplate.getName(), codeTemplate);
         });
         return map;

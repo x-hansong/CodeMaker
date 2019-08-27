@@ -67,8 +67,7 @@ public class CodeTemplate {
     }
 
     public String getTargetLanguage() {
-        if(targetLanguage == null) return "java";
-        else return targetLanguage;
+        return targetLanguage == null ? "java" : targetLanguage;
     }
 
     public void setTargetLanguage(String targetLanguage) {
