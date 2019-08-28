@@ -88,7 +88,7 @@ public class TemplateEditPane {
 
         setUpShowTestInputButton();
 
-        TargetLanguageSelect.INSTANCE.initCombo(targetLanguage, codeTemplate.getTargetLanguage());
+        TargetLanguageSelect.initCombo(targetLanguage, codeTemplate.getTargetLanguage());
     }
 
     protected void setUpShowTestInputButton() {

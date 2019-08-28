@@ -1,9 +1,9 @@
 <%/*
   Generates java code that creates a ClassEntry that can be used as test input
   */%>
-import com.xiaohansong.codemaker.ClassEntry;
-import com.xiaohansong.codemaker.ClassEntry.Field;
-import com.xiaohansong.codemaker.ClassEntry.Method;
+import ClassEntry;
+import ClassEntry.Field;
+import ClassEntry.Method;
 
 import java.util.ArrayList;
 

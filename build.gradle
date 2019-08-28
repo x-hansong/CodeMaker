@@ -23,16 +23,6 @@ dependencies {
 apply plugin: 'java'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-sourceSets {
-    main {
-        java.srcDirs 'src'
-        resources.srcDirs 'resources'
-    }
-    test {
-        java.srcDirs 'test'
-        resources.srcDirs 'test-resources'
-    }
-}
 
 intellij {
     version 'IU-2019.1.3'

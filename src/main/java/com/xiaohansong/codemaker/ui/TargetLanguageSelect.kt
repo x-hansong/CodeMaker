@@ -4,10 +4,11 @@ import com.intellij.lang.Language
 import javax.swing.JComboBox
 
 object TargetLanguageSelect {
-    fun initCombo(langCombo: JComboBox<TargetLanguage>, selected: String) = {
+    @JvmStatic
+    fun initCombo(langCombo: JComboBox<TargetLanguage>, selected: String) {
         // this sets the width of the combobox
         langCombo.prototypeDisplayValue = TargetLanguage("xxxxxxxxxxxxxx", "")
-        LanguageList.languages.forEach {langCombo.addItem(it) }
+        LanguageList.languages.forEach { langCombo.addItem(it) }
         langCombo.selectedItem = LanguageList.find(selected)
     }
 }
@@ -27,7 +28,7 @@ object LanguageList {
         get() = this.associatedFileType?.defaultExtension.orEmpty()
 
     val languages: List<TargetLanguage>
-    val defaultLanguage = TargetLanguage("Java", "java")
+    private val defaultLanguage = TargetLanguage("Java", "java")
 
     fun find(id: String): TargetLanguage =
         languages.find { it.fileType.toLowerCase() == id.toLowerCase() } ?: defaultLanguage

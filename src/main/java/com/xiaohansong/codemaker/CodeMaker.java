@@ -5,7 +5,7 @@ import com.intellij.openapi.components.ApplicationComponent;
 
 /**
  * @author hansong.xhs
- * @version \$Id: com.xiaohansong.codemaker.CodeMaker.java, v 0.1 2017-01-19 10:18 hansong.xhs Exp $$
+ * @version \$Id: CodeMaker.java, v 0.1 2017-01-19 10:18 hansong.xhs Exp $$
  */
 public class CodeMaker implements ApplicationComponent {
     public CodeMaker() {
@@ -22,6 +22,6 @@ public class CodeMaker implements ApplicationComponent {
     @Override
     @NotNull
     public String getComponentName() {
-        return "com.xiaohansong.codemaker.CodeMaker";
+        return "CodeMaker";
     }
 }
