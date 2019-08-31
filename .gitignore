@@ -8,3 +8,4 @@ build/
 gradle/
 gradlew
 gradlew.bat
+.kotlintest
