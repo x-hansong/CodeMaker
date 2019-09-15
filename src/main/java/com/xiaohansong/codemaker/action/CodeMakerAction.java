@@ -128,11 +128,15 @@ public class CodeMakerAction extends AnAction implements DumbAware {
 
     private void showSource(Project project, String language, String className, String content) {
         final Editor editor = Editors.createSourceEditor(project, language, content, true);
-        final DialogBuilder builder = new DialogBuilder(project);
-        builder.addCloseButton().setText("Close");
-        builder.setCenterPanel(editor.getComponent());
-        builder.setTitle(className);
-        builder.show();
+        try {
+            final DialogBuilder builder = new DialogBuilder(project);
+            builder.addCloseButton().setText("Close");
+            builder.setCenterPanel(editor.getComponent());
+            builder.setTitle(className);
+            builder.show();
+        } finally {
+            Editors.release(editor);
+        }
     }
 
     /**

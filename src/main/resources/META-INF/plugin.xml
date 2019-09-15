@@ -62,27 +62,27 @@
         <!-- Add your actions here -->
         <group id="com.xiaohansong.codemaker.action.CodeMakerMenu"
                class="com.xiaohansong.codemaker.action.CodeMakerGroup" text="CodeMaker"
-               description="" popup="true">
+               description="CodeMaker actions" popup="true">
             <add-to-group group-id="GenerateGroup" anchor="after" relative-to-action="JavaGenerateGroup2"/>
         </group>
         <action class="com.xiaohansong.codemaker.action.DocGenerateAction"
                 id="com.xiaohansong.codemaker.action.DocGenerateAction"
-                text="Generate JavaDoc for override method">
+                text="Generate JavaDoc for Override Method">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>
         <action class="com.xiaohansong.codemaker.action.GenerateApiTableHtmlAction"
                 id="com.xiaohansong.codemaker.action.GenerateApiTableHtmlAction"
-                text="Generate Api html table to clipboard">
+                text="Generate Api Html Table to Clipboard">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>
         <action class="com.xiaohansong.codemaker.action.GenerateApiTableMarkdownAction"
                 id="com.xiaohansong.codemaker.action.GenerateApiTableMarkdownAction"
-                text="Generate Api markdown table to clipboard">
+                text="Generate Api Markdown Table to Clipboard">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>
         <action class="com.xiaohansong.codemaker.action.GenerateCodeFromApiTableAction"
                 id="com.xiaohansong.codemaker.action.GenerateCodeFromApiTableAction"
-                text="Generate code from Api Table">
+                text="Generate Code from Api Table">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>
     </actions>

@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static scala.collection.JavaConversions.asJavaIterator;
 import static scala.collection.JavaConversions.seqAsJavaList;
 
 /**
@@ -172,9 +173,9 @@ public class CodeMakerUtil {
     }
 
     public static List<ClassEntry.Field> getScalaClassFields(ScClass scalaClass) {
-        return seqAsJavaList(scalaClass.allVals()).stream()
-            .filter(tuple -> tuple._1() instanceof ScClassParameter).map(tuple -> {
-                ScClassParameter val = (ScClassParameter) tuple._1();
+        return Lists.newArrayList(asJavaIterator(scalaClass.allVals())).stream()
+            .filter(ts -> ts.namedElement() instanceof ScClassParameter).map(ts -> {
+                ScClassParameter val = (ScClassParameter) ts.namedElement();
                 return new ClassEntry.Field(val.paramType().get().getText(), val.name(),
                     val.getModifierList().getText(), "");
             }).collect(Collectors.toList());

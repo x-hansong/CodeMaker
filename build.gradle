@@ -6,7 +6,7 @@ buildscript {
 }
 
 plugins {
-    id "org.jetbrains.intellij" version "0.4.9"
+    id "org.jetbrains.intellij" version "0.4.10"
     id "org.jetbrains.kotlin.jvm" version "1.3.41"
 }
 
@@ -27,12 +27,12 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 intellij {
-    version 'IU-2019.1.3'
+    version 'IU-2019.2.2'
     pluginName 'CodeMaker'
     updateSinceUntilBuild false
-    plugins = ["org.intellij.scala:2019.1.3"]
+    plugins = ["org.intellij.scala:2019.2.2", 'java']
 }
 
 group 'com.xiaohansong'
-version '1.5'
+version '1.6'
 
