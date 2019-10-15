@@ -11,14 +11,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * @author hansong.xhs
  * @version $Id: CodeMakerSettings.java, v 0.1 2017-01-28 9:30 hansong.xhs Exp $$
  */
-@State(name = "CodeMakerSettings", storages = {@Storage(id = "app-default", file = "$APP_CONFIG$/CodeMaker-settings.xml")})
+@State(name = "CodeMakerSettings", storages = {@Storage("$APP_CONFIG$/CodeMaker-settings.xml")})
 public class CodeMakerSettings implements PersistentStateComponent<CodeMakerSettings> {
 
     /**
@@ -31,16 +31,19 @@ public class CodeMakerSettings implements PersistentStateComponent<CodeMakerSett
 
     private void loadDefaultSettings() {
         try {
-            Map<String, CodeTemplate> codeTemplates = new HashMap<>();
+            Map<String, CodeTemplate> codeTemplates = new LinkedHashMap<>();
             codeTemplates.put("Model",
-                    createCodeTemplate("Model.vm",
+                    createCodeTemplate("Model",
+                            "Model.vm",
                             "#set($end = ${class0.className.length()} - 2)${class0.className.substring(0,${end})}", 1, CodeTemplate.DEFAULT_ENCODING));
             codeTemplates.put("Converter",
-                    createCodeTemplate("Converter.vm", "${class0.className}Converter", 2, CodeTemplate.DEFAULT_ENCODING));
+                    createCodeTemplate("Converter", "Converter.vm", "${class0.className}Converter", 2, CodeTemplate.DEFAULT_ENCODING));
             codeTemplates.put("Specs2 Matcher",
-                    createCodeTemplate("specs2-matcher.vm", "${class0.className}Matchers", 1, CodeTemplate.DEFAULT_ENCODING));
+                    createCodeTemplate("Specs2 Matcher", "specs2-matcher.vm", "${class0.className}Matchers", 1, CodeTemplate.DEFAULT_ENCODING));
+            codeTemplates.put("Specs2 Fluent Matcher",
+                    createCodeTemplate("Specs2 Fluent Matcher", "specs2-fluent-matcher.vm", "${class0.className}Matchers", 1, CodeTemplate.DEFAULT_ENCODING));
             codeTemplates.put("FieldComment",
-                    createCodeTemplate("FieldComment.vm", "${class0.className}", 1, CodeTemplate.DEFAULT_ENCODING));
+                    createCodeTemplate("FieldComment", "FieldComment.vm", "${class0.className}", 1, CodeTemplate.DEFAULT_ENCODING));
 
             this.codeTemplates = codeTemplates;
         } catch (Exception e) {
@@ -49,10 +52,9 @@ public class CodeMakerSettings implements PersistentStateComponent<CodeMakerSett
     }
 
     @NotNull
-    private CodeTemplate createCodeTemplate(String sourceTemplateName, String classNameVm, int classNumber, String fileEncoding) throws IOException {
+    private CodeTemplate createCodeTemplate(String name, String sourceTemplateName, String classNameVm, int classNumber, String fileEncoding) throws IOException {
         String velocityTemplate = FileUtil.loadTextAndClose(CodeMakerSettings.class.getResourceAsStream("/template/" + sourceTemplateName));
-        return new CodeTemplate(sourceTemplateName,
-                classNameVm, velocityTemplate, classNumber, fileEncoding);
+        return new CodeTemplate(name, classNameVm, velocityTemplate, classNumber, fileEncoding);
     }
 
     /**
@@ -80,7 +82,7 @@ public class CodeMakerSettings implements PersistentStateComponent<CodeMakerSett
     }
 
     @Override
-    public void loadState(CodeMakerSettings codeMakerSettings) {
+    public void loadState(@NotNull CodeMakerSettings codeMakerSettings) {
         XmlSerializerUtil.copyBean(codeMakerSettings, this);
     }
 
