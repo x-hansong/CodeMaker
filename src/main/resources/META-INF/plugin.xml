@@ -1,18 +1,19 @@
 <idea-plugin>
     <id>com.xiaohansong.codemaker</id>
     <name>CodeMaker</name>
-    <version>1.3</version>
+    <version>1.4</version>
     <vendor email="hansong.xhs@gmail.com" url="https://github.com/x-hansong/CodeMaker">Personal</vendor>
 
     <description><![CDATA[
     <p>This plugin generates code from right click 'Generate...' menu while focused
     on a java/scala class. The output class can be customized using a provided velocity template to format
-    the code based on the origin class and optional selected classes.</p>
+    the code based on the origin class and optional selected classes. There are many features are contribute
+    by Dmitry Karlinsky and I appreciate that.</p>
     <p>The following features are available: </p>
     <ul>
+      <li>Support add custom template to generate codes.(Velocity templates and groovy templates)</li>
       <li>Generate the model class for the persistent class.</li>
       <li>Generate the converter class for the model class and the persistent class.</li>
-      <li>Support add custom template to generate more code.</li>
       <li>Generate @see doc for override method</li>
       <li>Generate Api table to clipboard (html or markdown format)</li>
       <li>Generate the class field from api table in clipboard</li>
@@ -31,9 +32,16 @@
         Support selecting destination source root for the generated class. Thanks to @dkarlinsky<br>
         Support custom the generate file encoding<br>
       </li>
-        <li>version 1.3<br>
+      <li>version 1.3<br>
         Support generate api table for the class fields and paste it to the clipboard (html or markdown format)
         Support generate the class fields from the api table in clipboard
+      </li>
+      <li>version 1.4 (New features are contributed by Dmitry Karlinsky.)<br>
+        Support for groovy templates (similar to GSP, based on GStringTemplateEngine)<br>
+        Templates editor screen reworked.<br>
+        Added target language selector, per template.<br>
+        Added "test template" functionality based on selectable test inputs, currently Java class and Scala case class.<br>
+        Added Kotlin support to the build and refactored out some logic and UI to Kotlin classes<br>
       </li>
     </ul>
     ]]>
@@ -48,7 +56,7 @@
     <depends>com.intellij.modules.lang</depends>
     -->
     <depends>com.intellij.modules.java</depends>
-    <depends optional="true">org.intellij.scala</depends>
+    <depends optional="true" config-file="">org.intellij.scala</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->

@@ -3,20 +3,23 @@ A idea-plugin for Java/Scala to generate code, support custom code template.
 
 ![demonstration](https://blog.xiaohansong.com/media/15473672636863/15473884273212.gif)
 
-This plugin generates code from right click 'Generate...' menu while focused on a Java/Scala class. The output class can be customized using a provided velocity template to format the code based on the origin class and optional selected classes.</p>
+This plugin generates code from right click 'Generate...' menu while focused on a Java/Scala class. The output class can be customized using a provided velocity template to format the code based on the origin class and optional selected classes. There are many features are contributed by [Dmitry Karlinsky](https://github.com/dkarlinsky) and I appreciate that.
 
 The following features are available: 
 
+- Support add custom template to generate more code.(Velocity templates and groovy templates)
 - Generate the model class for the persistent class.
 - Generate the converter class for the model class and the persistent class.
-- Support add custom template to generate more code.
 - Generate `@see` doc for override method.
 - Support Scala.
 - Generate api table from code 
 
 # Install
-1. Search 'CodeMaker' in Idea plugins
-2. Download [Releases](https://github.com/x-hansong/CodeMaker/releases)
+## Option 1
+- Search 'CodeMaker' in Idea plugins repository.
+
+## Option 2
+Download [Releases](https://github.com/x-hansong/CodeMaker/releases)
 
 To install a plugin from the disk in idea
 

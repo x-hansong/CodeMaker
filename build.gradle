@@ -16,10 +16,11 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.14'
+    compileOnly 'org.projectlombok:lombok:1.18.8'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
     testCompile("io.kotlintest:kotlintest-runner-junit5:3.3.2")
-    testCompile "io.mockk:mockk:v1.9.3"
+    testCompile "io.mockk:mockk:1.9.3"
 }
 
 apply plugin: 'java'
@@ -34,5 +35,5 @@ intellij {
 }
 
 group 'com.xiaohansong'
-version '1.6'
+version '1.4'
 
