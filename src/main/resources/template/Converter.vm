@@ -62,9 +62,7 @@ class $ClassName {
         $class0.ClassName ${class0Var} = new ${class0.ClassName}();
 
 #foreach($field in $class0.Fields)
-#if( $field.modifier.equals("private"))
         ${class0Var}.set#cap($field.Name)(${class1Var}.get#cap($field.Name)());
-#end
 #end
 
         return ${class0Var};
@@ -82,9 +80,7 @@ class $ClassName {
         $class1.ClassName ${class1Var} = new ${class1.ClassName}();
 
 #foreach($field in $class1.Fields)
-#if( $field.modifier.equals("private"))
         ${class1Var}.set#cap($field.Name)(${class0Var}.get#cap($field.Name)());
-#end
 #end
 
         return ${class1Var};

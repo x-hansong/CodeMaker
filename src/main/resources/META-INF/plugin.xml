@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.xiaohansong.codemaker</id>
     <name>CodeMaker</name>
-    <version>1.4</version>
+    <version>1.4.1</version>
     <vendor email="hansong.xhs@gmail.com" url="https://github.com/x-hansong/CodeMaker">Personal</vendor>
 
     <description><![CDATA[

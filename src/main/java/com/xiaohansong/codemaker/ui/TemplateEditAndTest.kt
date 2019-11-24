@@ -62,7 +62,7 @@ class TemplateEditAndTest(private val splitPane: JSplitPane,
     }
 
     private fun newTemplateEditor(text: String, lang: TemplateLanguage): Editor {
-        return Editors.createSourceEditor(null, lang.fileType, text, true)
+        return Editors.createSourceEditor(null, lang.fileType, text, false)
     }
 
     fun refreshTestInput() {
